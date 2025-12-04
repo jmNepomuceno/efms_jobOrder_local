@@ -1,0 +1,346 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+::-webkit-scrollbar {
+    width: 8px; 
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.5); 
+    border-radius: 4px; 
+    cursor: pointer;
+}
+
+::-webkit-scrollbar-track {
+    background-color: #f1f1f1; 
+}
+
+.pending-view{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    width: 75%;
+    height: 80%;
+    box-shadow: rgba(0, 0, 0, 0.07) 0px 1px 2px, rgba(0, 0, 0, 0.07) 0px 2px 4px, rgba(0, 0, 0, 0.07) 0px 4px 8px, rgba(0, 0, 0, 0.07) 0px 8px 16px, rgba(0, 0, 0, 0.07) 0px 16px 32px, rgba(0, 0, 0, 0.07) 0px 32px 64px;
+}
+
+.pending-view h1{
+    height: 50px;
+    width: 100%;
+    margin-top: 10px;
+    font-size: 1.4rem;
+    text-align: center;
+
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    font-weight: bold;
+    margin:0;
+    margin-top:10px;
+}
+
+.pending-view .table-container{
+    width: 100%;
+    height: 95%;
+
+    /* overflow-y: scroll !important;
+    overflow-x: hidden; */
+}
+
+.pending-view .table-container #pending-dataTable{
+    width: 100%;
+    height: 100%;
+    text-align: center !important;
+}
+
+/* D9D9D9 */
+.pending-view .table-container #pending-dataTable thead tr{
+    background: #914c07;
+}
+
+.pending-view .table-container #pending-dataTable thead tr th{
+    text-align: center;
+    height: 20px;
+    font-weight: 900;
+    color:white;
+}
+
+.pending-view .table-container #pending-dataTable tbody tr:nth-child(even){
+    /* border-right: 1px solid black; */
+    /* border-bottom: 1px solid black; */
+    background: #b3e1e5;
+    box-shadow: rgb(204, 219, 232) 3px 3px 6px 0px inset, rgba(255, 255, 255, 0.5) -3px -3px 6px 1px inset;
+}
+
+.pending-view .table-container #pending-dataTable tbody tr:hover{
+    background: #7acad1;
+    cursor: pointer;
+}
+
+.pending-view .table-container #pending-dataTable tbody tr td span,
+.pending-view .table-container #pending-dataTable tbody tr td div button{
+    font-size: 0.8rem;
+}
+
+.pending-view .table-container #pending-dataTable tbody tr td div{
+    display:flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap:5px;
+}
+
+.pending-view .table-container #pending-dataTable tbody tr td .pending-status-span{
+    text-transform: uppercase;
+    color:#b36500;
+    font-weight: 900;
+}
+
+#modal-cancel-form .modal-content .modal-header{
+    width: 100%;
+    height: 50px;
+    background: #344c44;
+}
+
+#modal-cancel-form .modal-content .modal-header h5{
+    color:white;
+    font-weight: 600;
+}
+
+#modal-cancel-form .modal-content .modal-footer{
+    padding:0;
+}
+
+#modal-cancel-form .modal-content .modal-footer button{
+    background: #007bff;
+    border:none;
+    padding:7px;
+    color:white;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    font-weight: bold;
+}
+
+#modal-cancel-form .modal-content #modal-body-incoming{
+    width: 100%;
+    height: 100px;
+
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#modal-cancel-form .modal-content #modal-body-incoming h3{
+    font-size: 1rem;
+    width: 95%;
+    margin:0;
+}
+
+#modal-cancel-form .modal-content #modal-body-incoming textarea{
+    font-size: 1rem;
+    resize: none;
+    width: 95%;
+}
+
+#modal-view-form .modal-content{
+    padding: 5px;
+    border-radius: 12px;
+}
+
+#modal-view-form .modal-content .modal-header{
+    width: 100%;
+    height: 50px;
+    background: #344c44;
+}
+
+#modal-view-form .modal-content .modal-header h5{
+    color:white;
+    font-weight: 600;
+}
+
+#modal-view-form .modal-content .modal-footer{
+    padding:0;
+}
+
+#modal-view-form .modal-content .modal-footer button{
+    background: #007bff;
+    border:none;
+    padding:7px;
+    color:white;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    font-weight: bold;
+}
+
+#modal-view-form .modal-content #modal-body-incoming{
+    display:flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    gap:30px;
+}
+
+/* ************** */
+#modal-view-form .modal-content #modal-body-incoming .main-information{
+    width: 100%;
+    height: 150px;
+
+    display:flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+
+}
+
+#modal-view-form .modal-content #modal-body-incoming .main-information .user-info{
+    width: 50%;
+    height: 100%;
+
+    display:flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding:10px;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
+}
+
+#modal-view-form .modal-content #modal-body-incoming .main-information .user-info i{
+    width: 25%;
+    height: 75%;
+    border-radius: 50%;
+    border: 2px solid #503830;
+    font-size: 4rem;
+
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    background: black;
+    color:white;
+
+}
+
+#modal-view-form .modal-content #modal-body-incoming .main-information .user-info .user-details{
+    /* border:1px solid orange; */
+    width: 70%;
+    height: 100%;
+    
+    display:flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items:  flex-start;
+    
+}
+
+#modal-view-form .modal-content #modal-body-incoming .main-information .user-info .user-details p{
+    font-size: 0.9rem;
+    margin:0;
+    padding:0;
+}
+
+#modal-view-form .modal-content #modal-body-incoming .main-information .job-order-info{
+    width: 45%;
+    height: 100%;
+
+    display:flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
+
+    padding:10px;
+
+    /* border:1px solid red; */
+}
+
+#modal-view-form .modal-content #modal-body-incoming .main-information .job-order-info .info-heading,
+#modal-view-form .modal-content #modal-body-incoming .request-description .info-heading,
+#modal-view-form .modal-content #modal-body-incoming .tech-assessment-section .info-heading{
+    width: 100%;
+    border-radius: 5px;
+    background: #5d897a;
+    padding:5px;
+    color:white;
+    text-align: center;
+    font-size: 1rem;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+#modal-view-form .modal-content #modal-body-incoming .main-information .job-order-info p{
+    margin:0;
+    padding:0;
+    font-size: 0.9rem !important;
+    margin:5px;
+}
+
+#modal-view-form .modal-content #modal-body-incoming .request-description,
+#modal-view-form .modal-content #modal-body-incoming .tech-assessment-section{
+    width: 100%;
+    height: 200px;
+
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
+    padding:10px;
+}
+
+
+#modal-view-form .modal-content #modal-body-incoming .tech-assessment-section{
+    display:flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#modal-view-form .modal-content #modal-body-incoming .tech-assessment-section .tech-info-assessment{
+    width: 100%;
+    height: 30px;
+
+    display:flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#modal-view-form .modal-content #modal-body-incoming .tech-assessment-section .tech-remarks-textarea{
+    width: 100%;
+    height: 80%;
+    resize: none;
+    outline:none;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border:1px solid #8f6456;
+    border:none;
+    /* border-top:none; */
+
+    pointer-events: none;
+}
+
+#modal-view-form .modal-content #modal-body-incoming #start-assess-btn{
+    margin-top: -20px;
+    background: #90afc5;
+    color:black;
+    font-weight: 600;
+    /* text-transform: uppercase; */
+    font-size: 0.9rem;
+    border:1px solid #90afc5;
+}
+
+@media only screen and (max-height: 800px){
+    .pending-view .table-container #pending-dataTable thead tr{
+        background: #646b6b;
+    }
+
+    .pending-view .table-container #pending-dataTable thead tr th{
+        font-size: 0.8rem;
+    }
+}

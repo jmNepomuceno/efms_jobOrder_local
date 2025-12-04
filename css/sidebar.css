@@ -1,0 +1,249 @@
+body .left-container {
+    width: 15%;
+    height: 100vh;
+    background: #2A2F36; /* 🩶 Steel base */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    position: relative;
+    box-shadow: 4px 0 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Header */
+body .left-container .home-name-div {
+    width: 95%;
+    height: 50px;
+    margin-top: 20px;
+    padding: 5px;
+    background: #3A4048; /* Slightly lighter steel tone */
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+body .left-container .home-name-div h1 {
+    color: #E4E4E4;
+    font-size: 1.1rem;
+    font-weight: 800;
+    margin: 0;
+}
+
+/* Sidebar Routes */
+body .left-container .side-bar-route {
+    width: 100%;
+    height: 70%;
+    margin-top: 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+body .left-container .side-bar-route .side-bar-routes {
+    width: 90%;
+    height: 50px;
+    background: transparent;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 6px;
+    margin-top: 5px;
+    position: relative;
+    transition: all 0.2s ease;
+}
+
+body .left-container .side-bar-route .side-bar-routes:hover {
+    background: #C08457; /* 🟤 Bronze hover */
+    transform: translateX(3px);
+}
+
+body .left-container .side-bar-route .side-bar-routes i,
+body .left-container .side-bar-route .side-bar-routes span {
+    color: #F5F5F5;
+    margin-left: 20px;
+    font-size: 1rem;
+}
+
+body .left-container .side-bar-route .side-bar-routes span {
+    font-weight: 600;
+}
+
+body .left-container .side-bar-route .side-bar-routes #notif-value {
+    margin-left: 20px;
+    border-radius: 50%;
+    color: #fff;
+    background: #E74C3C;
+    padding: 3px 8px;
+    font-weight: 700;
+    display: none;
+}
+
+/* Submenu */
+body .left-container .sub-down-div {
+    width: 90%;
+    display: none;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+body .left-container .sub-down-div .sub-down-bar-routes {
+    width: 100%;
+    height: 45px;
+    background: #353B44; /* darker steel */
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    transition: background 0.2s ease;
+}
+
+body .left-container .sub-down-div .sub-down-bar-routes:hover {
+    background: #C08457;
+}
+
+body .left-container .sub-down-div .sub-down-bar-routes i,
+body .left-container .sub-down-div .sub-down-bar-routes span {
+    color: #EEE;
+    margin-left: 20px;
+    font-size: 0.9rem;
+}
+
+/* User Info */
+body .left-container .user-acc-div {
+    width: 100%;
+    height: 150px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    position: absolute;
+    bottom: 0;
+}
+
+body .left-container .user-acc-div .user-info {
+    width: 90%;
+    height: 50px;
+    background: #3A4048;
+    color: #EEE;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    border-radius: 6px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+body .left-container .user-acc-div .user-info img {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    margin-left: 10px;
+    background: #2A2F36;
+    padding: 5px;
+}
+
+body .left-container .user-acc-div .user-info p {
+    margin: 0;
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+body .left-container .user-acc-div .user-info p span {
+    font-weight: 900;
+    color: #C08457; /* Bronze name accent */
+}
+
+/* Logout button */
+body .left-container .user-acc-div button {
+    width: 90%;
+    height: 40px;
+    border: 1px solid #C08457;
+    border-radius: 6px;
+    background: transparent;
+    color: #C08457;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+body .left-container .user-acc-div button:hover {
+    background: #C08457;
+    color: #fff;
+}
+
+body .left-container .user-acc-div button i {
+    margin: 0 10px;
+}
+
+
+body .left-container .side-bar-route .side-bar-routes #dashboard-arrow{
+
+}
+
+
+#modal-logout .modal-content .modal-header{
+    width: 100%;
+    height: 50px;
+    background: #30221d;
+}
+
+#modal-logout .modal-content .modal-header h5{
+    color:white;
+    font-weight: 600;
+}
+
+
+#modal-logout .modal-content .modal-footer button{
+    background: #007bff;
+    border:none;
+    padding:7px;
+    color:white;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    font-weight: bold;
+}
+
+#sub-routes-hr{
+    border:1px solid #555b62;
+    width:90%;
+    margin-top:10px;
+    margin-bottom:10px;
+    
+}
+
+@media only screen and (max-height: 800px){
+    body .left-container .home-name-div h1{
+        font-size: 0.8rem;
+    }
+
+    body .left-container .side-bar-route .side-bar-routes i,
+    body .left-container .side-bar-route .side-bar-routes span{
+        color:white;
+        margin-left:20px;
+        font-size: 0.7rem;
+    }
+
+    body .left-container .side-bar-route .side-bar-routes #notif-value{
+        padding:0 7px 0 7px;
+        font-size: 0.9rem;
+    }
+
+    body .left-container .sub-down-div .sub-down-bar-routes i,
+    body .left-container .sub-down-div .sub-down-bar-routes span{
+        color:white;
+        margin-left:20px;
+        font-size: 0.65rem;
+    }
+
+    body .left-container .user-acc-div .user-info p{
+        font-size:0.7rem;
+    }
+
+    body .left-container .user-acc-div .user-info p span{
+        font-size:0.7rem;
+    }
+}

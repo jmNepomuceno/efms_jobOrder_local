@@ -1,0 +1,187 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+    width: 8px; 
+}
+::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.5); 
+    border-radius: 4px; 
+    cursor: pointer;
+}
+::-webkit-scrollbar-track {
+    background-color: #f1f1f1; 
+}
+
+/* Body + layout */
+body {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+body .right-container {
+    width: 85%;
+    height: 100vh;
+    background: #FFFEFE;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: flex-start;
+    position: relative;
+    padding-top: 30px;
+    overflow-y: auto;
+}
+
+/* --- Main container --- */
+.admin-account-container {
+    width: 95%;
+    margin: 20px auto;
+    background: #fff;
+    padding: 25px 30px;
+    border-radius: 10px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+}
+.admin-account-container h3 {
+    text-align: center;
+    color: #1f1f1f;
+    margin-bottom: 25px;
+    letter-spacing: 0.5px;
+}
+
+/* --- DataTable styling --- */
+#admin-dataTable {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+#admin-dataTable th,
+#admin-dataTable td {
+    padding: 10px 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    vertical-align: middle;
+}
+#admin-dataTable th {
+    background: #2a2f36;
+    color: #fff;
+    text-transform: uppercase;
+    font-size: 13px;
+    letter-spacing: 0.5px;
+}
+#admin-dataTable tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+#admin-dataTable tr:hover {
+    background-color: #eaf2ff;
+}
+
+/* --- Role badges --- */
+.role-badge {
+    padding: 5px 10px;
+    border-radius: 6px;
+    font-weight: bold;
+    font-size: 13px;
+}
+.role-badge.admin {
+    background: #fff6db;
+    color: #9c7a00;
+}
+.role-badge.super {
+    background: #dceeff;
+    color: #0d47a1;
+}
+
+/* --- DataTables integration styling --- */
+.dataTables_wrapper .dataTables_filter input {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 6px 8px;
+    outline: none;
+}
+.dataTables_wrapper .dataTables_filter input:focus {
+    border-color: #0078d7;
+}
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+    background: #f3f3f3;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 5px 10px;
+    margin: 2px;
+    color: #333 !important;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+    background: #0078d7;
+    color: white !important;
+}
+.dataTables_wrapper .dataTables_paginate .paginate_button.current {
+    background: #0078d7;
+    color: white !important;
+}
+
+/* --- Action buttons --- */
+.action-admin-div {
+    display: flex;
+    gap: 8px;
+}
+.action-admin-div button {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 6px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out;
+}
+.action-admin-div .btn-primary {
+    background-color: #0078d7;
+    color: white;
+}
+.action-admin-div .btn-primary:hover {
+    background-color: #005fa3;
+    transform: scale(1.03);
+}
+.action-admin-div .btn-danger {
+    background-color: #d9534f;
+    color: white;
+}
+.action-admin-div .btn-danger:hover {
+    background-color: #b52b27;
+    transform: scale(1.03);
+}
+
+/* --- Feedback messages --- */
+.no-data {
+    text-align: center;
+    color: #666;
+    margin-top: 20px;
+    font-style: italic;
+}
+.error {
+    color: red;
+    text-align: center;
+    margin-top: 20px;
+}
+
+/* --- Responsive tweaks --- */
+@media (max-width: 768px) {
+    .admin-account-container {
+        padding: 15px;
+    }
+    #admin-dataTable th, #admin-dataTable td {
+        font-size: 12px;
+        padding: 8px;
+    }
+    .action-admin-div {
+        flex-direction: column;
+    }
+    .action-admin-div button {
+        width: 100%;
+    }
+}

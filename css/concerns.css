@@ -1,0 +1,220 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+::-webkit-scrollbar {
+    width: 8px; 
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.5); 
+    border-radius: 4px; 
+    cursor: pointer;
+}
+
+::-webkit-scrollbar-track {
+    background-color: #f1f1f1; 
+}
+
+body{
+    display:flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+
+body .right-container{
+    width: 85%;
+    height: 100vh;
+
+    background: #FFFEFE;
+    
+    display:flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+
+    position:relative;
+}
+
+body .right-container .concern-container {
+    width: 95%;
+    margin: 20px auto;
+    background: #fff;
+    padding: 25px 30px;
+    border-radius: 10px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+}
+
+body .right-container .concern-form-card {
+    padding: 30px;
+    background: #f8f9fa;
+    border-radius: 10px;
+    margin-bottom: 30px;
+    border: 1px solid #ddd;
+
+    display:flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+body .right-container .concern-form-card h2 {
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+body .right-container .form-group {
+    width: 100%;
+    margin-bottom: 12px;
+}
+
+body .right-container .form-group input,
+body .right-container .form-group textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #bbb;
+    border-radius: 6px;
+    resize: none;
+}
+
+body .right-container #submit-concern-btn {
+    padding: 10px 20px;
+    background: #0d6efd;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+body .right-container #submit-concern-btn:hover {
+    background: #0a58ca;
+}
+
+/* Table */
+body .right-container .concern-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+body .right-container .concern-table th, 
+body .right-container .concern-table td {
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+}
+
+body .right-container .status-badge {
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    color: white;
+}
+body .right-container .status-pending { background: #ffc107; }
+body .right-container .status-resolved { background: #28a745; }
+body .right-container .status-responded { background: #0d6efd; }
+
+/* Expandable details */
+body .right-container .concern-details-row {
+    background: #f1f1f1;
+}
+
+body .right-container .details-box {
+    padding: 15px;
+}
+
+body .right-container .admin-response-box {
+    margin-top: 15px;
+    display: flex;
+    gap: 10px;
+}
+
+body .right-container .admin-response-box textarea {
+    flex: 1;
+}
+
+body .right-container .send-response-btn {
+    padding: 8px 15px;
+    background: #198754;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+body .right-container .send-response-btn:hover {
+    background: #157347;
+}
+
+.view-details-btn {
+    padding: 6px 12px;
+    background: #6c757d;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.details-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.close-details-btn {
+    background: #d9534f;
+    color: white;
+    border: none;
+    padding: 3px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.close-details-btn:hover {
+    background: #c9302c;
+}
+
+/* --- DataTable styling --- */
+.concern-table  {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+.concern-table  th,
+.concern-table  td {
+    padding: 10px 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    vertical-align: middle;
+}
+.concern-table  th {
+    background: #2a2f36;
+    color: #fff;
+    text-transform: uppercase;
+    font-size: 13px;
+    letter-spacing: 0.5px;
+}
+.concern-table  tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+.concern-table  tr:hover {
+    background-color: #eaf2ff;
+}
+
+
+@media only screen and (max-height: 800px){
+    body .right-container .title-div h1{
+        font-size:2rem;
+    }
+
+    body .right-container .title-div h1 span{
+        font-size: 3.5rem;
+    }
+
+    body .right-container .title-div h3{
+        color:#30211d;
+        font-weight: 600;
+        font-size: 1.5rem;
+    }
+}

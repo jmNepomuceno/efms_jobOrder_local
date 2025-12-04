@@ -1,0 +1,96 @@
+<!-- Announcement Modal -->
+<style>
+/* Overlay */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.55);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 99999;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Modal box */
+.modal-box {
+    background: #fff;
+    padding: 25px;
+    border-radius: 10px;
+    width: 450px;
+    max-width: 90%;
+    text-align: center;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+}
+
+.modal-buttons {
+    margin-top: 20px;
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+/* Buttons */
+.modal-box button {
+    padding: 10px 18px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 15px;
+}
+
+/* Primary button */
+#goToNewSystem {
+    background: #0078ff;
+    color: white;
+}
+
+#goToNewSystem:hover {
+    background: #005fcc;
+}
+
+/* Close button */
+.close-btn {
+    background: #ccc;
+    color: #000;
+}
+
+.close-btn:hover {
+    background: #b5b5b5;
+}
+
+</style>
+
+<!-- Announcement Modal -->
+<div id="announcementModal" class="modal-overlay">
+    <div class="modal-box">
+        <h2>New EFMS Job Order System</h2>
+        <p>
+            A newer and improved version of the EFMS Job Order System will be available for soft launching at 1:00 PM.
+            Please use the updated system for all new submissions. If you have pending requests in the old system, you may close this modal and continue processing them there.
+            Otherwise, once ready, you can proceed to the new version.
+        </p>
+
+        <div class="modal-buttons">
+            <button id="goToNewSystem" disabled style="pointer-events:none; opacity:0.3">Go to New Version</button>
+            <button id="closeModal" class="close-btn">Close For now</button>
+        </div>
+    </div>
+</div>
+
+
+
+
+<script>
+document.getElementById("goToNewSystem").addEventListener("click", function () {
+    window.location.href = "http://your-new-efms-url-here";
+});
+
+document.getElementById("closeModal").addEventListener("click", function () {
+    document.getElementById("announcementModal").style.display = "none";
+});
+</script>
+

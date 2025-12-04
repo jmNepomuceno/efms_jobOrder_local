@@ -1,0 +1,225 @@
+EFMS SIDE
+View Incoming Request
+Diagnosis -> Start Job
+Correction -> Send Back
+
+#1
+Diagnosis - Start Job
+Refresh incoming Request
+Add to Your Job On Process Data table
+Input remarks
+Finish Job
+
+#1-USER
+Request Problem
+Display in Pending
+Cannot request until pending is active
+Display On Process - Viewable Technician assessor
+Display on For Evaluation
+
+
+'name' => 'bghmc_unified',
+            'username' => 'sa',
+            'password' => 'Pr0f1l3R',
+            'connection' => 'sqlsrv:Server=192.168.42.10,1435',
+
+
+// dbo.tblEmployee
+// sectionID = 23
+// 
+
+bioID, LastName, FirstName, Middle, employmentStatus
+
+
+function onEdit(e) {
+  const sheet1Name = "Form Responses 1";
+  const templateSheetName = "Template";
+
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const formSheet = e.source.getActiveSheet();
+  if (formSheet.getName() !== sheet1Name) return;
+
+  const editedRow = e.range.getRow();
+  const rowValues = formSheet.getRange(editedRow, 1, 1, 30).getValues()[0]; // Adjust as needed
+
+  const templateSheet = ss.getSheetByName(templateSheetName);
+
+  // --- Step 1: Get PORTS (column 5, index 4) ---
+  const ports = rowValues[4];
+  const portList = ports.split(",").map(p => p.trim()).filter(p => p);
+
+  const startRow = 16;
+  templateSheet.getRange(startRow, 3, portList.length, 1).setValues(portList.map(p => [p]));
+
+  const accessible = rowValues[5];
+  templateSheet.getRange(startRow, 6, portList.length, 1).setValues(portList.map(() => [accessible]));
+
+  const backupVerification = rowValues[6];
+  templateSheet.getRange(startRow, 7, portList.length, 1).setValues(portList.map(() => [backupVerification]));
+
+  const backupFileName = rowValues[7];
+  templateSheet.getRange(startRow, 8, portList.length, 1).setValues(portList.map(() => [backupFileName]));
+
+  // === SERVER DATA SECTION ===
+  const serverStartRow = 31;
+  const serverNamesRaw = rowValues[11];
+  const serverAccess = rowValues[13];
+  const serverVerify = rowValues[14];
+  const serverFile = rowValues[15];
+
+  if (serverNamesRaw) {
+    const serverNames = serverNamesRaw.split(",").map(s => s.trim()).filter(s => s);
+
+    if (serverNames.length > 0) {
+      templateSheet.getRange(serverStartRow, 6, serverNames.length, 1).setValues(serverNames.map(() => [serverAccess]));
+      templateSheet.getRange(serverStartRow, 7, serverNames.length, 1).setValues(serverNames.map(() => [serverVerify]));
+      templateSheet.getRange(serverStartRow, 8, serverNames.length, 1).setValues(serverNames.map(() => [serverFile]));
+    }
+  }
+
+  // ✅ Send email
+  const emailAddress = rowValues[18];
+  if (!emailAddress.includes("@")) return;
+
+  SpreadsheetApp.flush(); // Ensure all updates are committed
+
+  const url = `https://docs.google.com/spreadsheets/d/${ss.getId()}/export?` +
+              `format=pdf&exportFormat=pdf&gid=${templateSheet.getSheetId()}` +
+              `&size=A4&portrait=true&fitw=true&sheetnames=false&printtitle=false` +
+              `&pagenumbers=false&gridlines=false&fzr=false`;
+
+  const token = ScriptApp.getOAuthToken();
+  const response = UrlFetchApp.fetch(url, {
+    headers: { Authorization: "Bearer " + token }
+  });
+
+  GmailApp.sendEmail(emailAddress, "Your Data Update from Sheet1", 
+    "Hi,\n\nPlease see the attached update extracted from the latest row in Sheet1.\n\nRegards,\nGoogle Sheets Bot",
+    {
+      attachments: [response.getBlob().setName("Template_Report.pdf")],
+      name: "Google Sheets Bot"
+    });
+}
+
+function testEmailOnly() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const templateSheet = ss.getSheetByName("Template");
+
+  const emailAddress = "mendoza.mikas.bghmc@gmail.com";
+  const url = `https://docs.google.com/spreadsheets/d/${ss.getId()}/export?` +
+              `format=pdf&exportFormat=pdf&gid=${templateSheet.getSheetId()}` +
+              `&size=A4&portrait=true&fitw=true&sheetnames=false&printtitle=false` +
+              `&pagenumbers=false&gridlines=false&fzr=false`;
+
+  const token = ScriptApp.getOAuthToken();
+  const response = UrlFetchApp.fetch(url, {
+    headers: { Authorization: "Bearer " + token }
+  });
+
+  GmailApp.sendEmail(emailAddress, "Test PDF Export", "Here's your PDF file.", {
+    attachments: [response.getBlob().setName("Template_Test.pdf")],
+    name: "Test Mailer"
+  });
+}
+
+HIMS	
+EMR	
+THEREFORE	
+EUROLINK	
+SYNAPSE	
+eNGAS	
+HRIS	
+
+
+reat! Since you're presenting a newly developed Service Delivery Network (SDN) System in a government hospital setting, your PowerPoint should be clear, practical, and benefit-driven — tailored to doctors and RHU staff who care about usability, patient tracking, and efficiency.
+
+🧠 Suggested PowerPoint Structure:
+1. Title Slide
+Title: “Service Delivery Network System Presentation”
+
+Subtitle: “A Modernized Referral and Tracking Platform”
+
+Your name, department, and date
+
+2. Background / Current Situation
+Brief overview of the old SDN system (bullet points)
+
+Common problems: slow referrals, poor tracking, UI confusion, manual work
+
+3. Objectives of the New System
+Improve referral efficiency
+
+Enhance inter-facility communication
+
+Provide real-time updates and logs
+
+Improve usability and reporting
+
+4. System Users
+Hospital Doctors (internal referrals, status updates)
+
+RHU Staff (sending/receiving referrals, tracking follow-ups)
+
+5. Key Features (Screenshots + Bullets)
+✅ Modern UI & Responsive Design
+✅ Referral Creation & Status Tracking
+✅ Patient History & Notes
+✅ PDF Printout or Acknowledgment Slip
+✅ Auto Notification for Receiving Facility
+✅ Searchable Patient Logs
+✅ Dashboard with Metrics
+
+6. Workflow Diagrams
+Old SDN vs New SDN flow (comparison diagram)
+
+Sample: RHU creates referral → hospital receives → patient managed → updates logged
+
+7. Technical Enhancements
+Mobile-friendly design
+
+Faster response time
+
+Audit trails
+
+Better database structure (if relevant)
+
+8. Benefits to Doctors & RHUs
+Less paperwork
+
+Better visibility of referred patients
+
+Accountability and real-time access
+
+Easier communication
+
+9. Live Demo (if possible)
+Show how to:
+
+Create referral
+
+View tracking status
+
+Print slip
+
+Access referral logs
+
+10. Future Plans (Optional)
+Integration with EMR?
+
+Analytics dashboard
+
+Feedback form or training rollout
+
+11. Closing Slide
+Summary of key improvements
+
+Contact info
+
+Open the floor for Q&A
+
+
+
+// EFMS Job Order System
+1. Request Designation on USER per TECH_ROLE
+2. websocket not working on the incoming request for other tech views, when one reques has been finished
+

@@ -1,0 +1,47 @@
+.nav-div{
+    position:absolute;
+    top:0;
+    left:0;
+
+    background: #30221d;
+    width: 100%;
+    height: 50px;
+
+    display:flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+.nav-div .content-name-div{
+    color:white;
+    width:20%;
+    height: 70%;
+    /* border:1px solid white; */
+    margin:0;
+    padding:0;
+
+    display:flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap:10px;
+}
+
+.nav-div .content-name-div i, .nav-div .content-name-div span{
+    font-weight: 600;
+    font-size: 1.3rem;
+}
+
+.nav-div img{
+    width: 40px;
+    height: 40px;
+    margin-right:20px;
+    margin-bottom: 5px;
+    cursor: pointer;
+    opacity: 0.5;
+}
+
+.nav-div img:hover{
+    opacity: 1;
+}

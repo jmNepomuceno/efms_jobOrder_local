@@ -1,0 +1,86 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+::-webkit-scrollbar {
+    width: 8px; 
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.5); 
+    border-radius: 4px; 
+    cursor: pointer;
+}
+
+::-webkit-scrollbar-track {
+    background-color: #f1f1f1; 
+}
+
+body{
+    display:flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+
+body .right-container{
+    width: 85%;
+    height: 100vh;
+
+    background: #FFFEFE;
+    
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    position:relative;
+}
+
+body .right-container .title-div{
+    /* border:1px solid red; */
+    width: 80%;
+    height: 50%;
+    display:flex;
+
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+body .right-container .title-div h1{
+    font-size:3rem;
+}
+
+body .right-container .title-div h1 span{
+    font-weight: 900;
+    font-size: 4.5rem;
+    color:#402d26;
+}
+
+body .right-container .title-div h3{
+    color:#30211d;
+    font-weight: 600;
+    font-size: 2rem;
+}
+
+
+@media only screen and (max-height: 800px){
+    body .right-container .title-div h1{
+        font-size:2rem;
+    }
+
+    body .right-container .title-div h1 span{
+        font-size: 3.5rem;
+    }
+
+    body .right-container .title-div h3{
+        color:#30211d;
+        font-weight: 600;
+        font-size: 1.5rem;
+    }
+}
