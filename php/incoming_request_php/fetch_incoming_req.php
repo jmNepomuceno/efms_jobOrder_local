@@ -60,7 +60,7 @@ try {
 
     if (count($data) > 0) {
         // Build category mapping
-        $categoryCodes = array_unique(array_column($data, 'requestCategory'));
+        $categoryCodes = array_values(array_unique(array_column($data, 'requestCategory')));
 
         if (count($categoryCodes) > 0) {
             $placeholders = str_repeat('?,', count($categoryCodes) - 1) . '?';

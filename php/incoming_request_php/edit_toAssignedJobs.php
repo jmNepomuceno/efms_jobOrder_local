@@ -36,9 +36,9 @@ try {
             $_POST['requestNo'],
             $tech['bioID'],
             $tech['name'],
-            $tech['remarks'],
-            $tech['start'],
-            $tech['end'],
+            "",
+            $_POST['assignStartDate'],
+            $_POST['assignEndDate'],
             $_SESSION['name']
         ]);
     }

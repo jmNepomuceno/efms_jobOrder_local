@@ -49,17 +49,28 @@ $(document).ready(function () {
             method: "GET",
             dataType: "json",
             success: function (response) {
-                // Destroy existing DataTable if initialized
+
+                // SAFELY DESTROY DATATABLE
                 if ($.fn.DataTable.isDataTable('.concern-table')) {
-                    $('.concern-table').DataTable().destroy();
+                    let dt = $('.concern-table').DataTable();
+                    dt.clear().destroy();
                 }
 
+                // CLEAR TBODY CONTENT
                 $("#concern-list").empty();
 
                 if (!response.success || response.data.length === 0) {
-                    $("#concern-list").append("<tr><td colspan='4'>No concerns found.</td></tr>");
+                    $("#concern-list").append(`
+                        <tr class="concern-row">
+                            <td>No data</td>
+                            <td>No data</td>
+                            <td>No data</td>
+                            <td>No data</td>
+                        </tr>
+                    `);
                 } else {
-                    concerns = response.data; // store globally
+
+                    concerns = response.data;
 
                     concerns.forEach(c => {
                         let badge = `
@@ -83,24 +94,27 @@ $(document).ready(function () {
                     });
                 }
 
-                // Initialize DataTable after rows are appended
-                concernsTable = $('.concern-table').DataTable({
-                    order: [[2, 'desc']], // default sort by date descending
-                    columnDefs: [
-                        { orderable: false, targets: 3 } // make Action column not sortable
-                    ],
-                    pageLength: 10,
-                    lengthMenu: [5, 10, 25, 50],
-                    language: {
-                        emptyTable: "No concerns available"
-                    }
-                });
+                // INITIALIZE DATATABLE *AFTER slight delay* to avoid column mismatch
+                setTimeout(() => {
+                    $('.concern-table').DataTable({
+                        order: [[2, 'desc']],
+                        columnDefs: [
+                            { orderable: false, targets: 3 }
+                        ],
+                        pageLength: 10,
+                        lengthMenu: [5, 10, 25, 50],
+                        language: {
+                            emptyTable: "No concerns available"
+                        }
+                    });
+                }, 50); // small delay prevents incorrect column count
             },
             error: function () {
                 $("#concern-list").html("<tr><td colspan='4'>Error loading concerns.</td></tr>");
             }
         });
     }
+
 
 
     // Expand details

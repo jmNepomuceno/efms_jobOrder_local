@@ -1831,6 +1831,8 @@ $(document).ready(function(){
     // })     
 
     $('#your-job-btn').on('click', function () {
+        $('.table-container').css('height' , '540px')
+
         const $container = $('.my-job-order-div');
         const $subBtns = $('#your-job-sub-btns');
 
@@ -1879,6 +1881,8 @@ $(document).ready(function(){
     });
     
     $(document).off('click', '#request-list-btn').on('click', '#request-list-btn', function() {
+        $('.table-container').css('height' , '720px')
+
         dataTable_incoming_request()
 
         let winHeight = $(window).height();
