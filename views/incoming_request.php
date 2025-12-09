@@ -49,21 +49,21 @@
     // $stmt = $pdo->prepare($sql);
     // $stmt->execute();
 
-    $sql = "UPDATE job_order_request SET requestStatus='Pending', processedBy=null, requestCorrectionDate=null, requestCorrection=null, requestJobRemarks=null, assignTo=NULL, assignBy=NULL, assignToBioID=NULL, assignTargetStartDate=NULL, assignTargetEndDate=NULL, processedByID=NULL, requestStartDate=NULL, requestPendingMaterials=NULL, requestForSched=NULL, requestPendingMaterialsDate=NULL, requestForSchedDate=NULL, requestEvaluationDate=NULL, requestCompletedDate=NULL WHERE requestID=231";
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute();
+    // $sql = "UPDATE job_order_request SET requestStatus='Pending', processedBy=null, requestCorrectionDate=null, requestCorrection=null, requestJobRemarks=null, assignTo=NULL, assignBy=NULL, assignToBioID=NULL, assignTargetStartDate=NULL, assignTargetEndDate=NULL, processedByID=NULL, requestStartDate=NULL, requestPendingMaterials=NULL, requestForSched=NULL, requestPendingMaterialsDate=NULL, requestForSchedDate=NULL, requestEvaluationDate=NULL, requestCompletedDate=NULL WHERE requestID=231";
+    // $stmt = $pdo->prepare($sql);
+    // $stmt->execute();
 
-    $sql = "DELETE FROM job_order_assigned_techs WHERE requestNo='IU-2025-12-001'";
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute();
+    //     $sql = "UPDATE job_order_request SET requestStatus='Pending', processedBy=null, requestCorrectionDate=null, requestCorrection=null, requestJobRemarks=null, assignTo=NULL, assignBy=NULL, assignToBioID=NULL, assignTargetStartDate=NULL, assignTargetEndDate=NULL, processedByID=NULL, requestStartDate=NULL, requestEvaluationDate=NULL, requestCompletedDate=NULL WHERE requestID=235";
+    // $stmt = $pdo->prepare($sql);
+    // $stmt->execute();
 
-        $sql = "UPDATE job_order_request SET requestStatus='Pending', processedBy=null, requestCorrectionDate=null, requestCorrection=null, requestJobRemarks=null, assignTo=NULL, assignBy=NULL, assignToBioID=NULL, assignTargetStartDate=NULL, assignTargetEndDate=NULL, processedByID=NULL, requestStartDate=NULL, requestEvaluationDate=NULL, requestCompletedDate=NULL WHERE requestID=235";
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute();
+    //     $sql = "UPDATE job_order_request SET requestStatus='Pending', processedBy=null, requestCorrectionDate=null, requestCorrection=null, requestJobRemarks=null, assignTo=NULL, assignBy=NULL, assignToBioID=NULL, assignTargetStartDate=NULL, assignTargetEndDate=NULL, processedByID=NULL, requestPendingMaterials=NULL, requestForSched=NULL, requestPendingMaterialsDate=NULL, requestForSchedDate=NULL, requestStartDate=NULL, requestEvaluationDate=NULL, requestCompletedDate=NULL WHERE requestID=236";
+    // $stmt = $pdo->prepare($sql);
+    // $stmt->execute();
 
-        $sql = "UPDATE job_order_request SET requestStatus='Pending', processedBy=null, requestCorrectionDate=null, requestCorrection=null, requestJobRemarks=null, assignTo=NULL, assignBy=NULL, assignToBioID=NULL, assignTargetStartDate=NULL, assignTargetEndDate=NULL, processedByID=NULL, requestPendingMaterials=NULL, requestForSched=NULL, requestPendingMaterialsDate=NULL, requestForSchedDate=NULL, requestStartDate=NULL, requestEvaluationDate=NULL, requestCompletedDate=NULL WHERE requestID=236";
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute();
+    // $sql = "DELETE FROM job_order_assigned_techs WHERE requestNo='IU-2025-12-001'";
+    // $stmt = $pdo->prepare($sql);
+    // $stmt->execute();
 
     // echo "<pre>"; print_r($_SESSION); echo "</pre>";
 
@@ -417,7 +417,7 @@
 
                 <!-- Modal Footer -->
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="close-modal-btn-request-info">Close</button>
                 </div>
             </div>
         </div>

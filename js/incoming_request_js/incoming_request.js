@@ -5,6 +5,7 @@ let fetch_requestData, fetch_techMyJob;
 let clicked_requestNo = 0, clicked_requestNo_myJob = 0;
 let clicked_tech_assess_textarea = ""
 let clicked_sub_nav = "Assigned"
+let edit_request_clicked = false;
 
 const dateFormatter = (originalDate) =>{
     const dateParts = originalDate.split(" - ");
@@ -263,22 +264,37 @@ const dataTable_my_jobs = (what) =>{
                         // $('#your-job-notif-span').css('display' , 'block')
 
                         let assignedTechs = response[i].assignedTechs || [];
+
+                        // If assignedTechs is empty but old columns exist, convert them into array form
+                        if (assignedTechs.length === 0 && response[i].assignTo) {
+                            assignedTechs = [{
+                                name: response[i].assignTo,
+                                bioID: response[i].assignToBioID
+                            }];
+                        }
+
                         let mainTech = assignedTechs.length ? assignedTechs[0].name : "";
-                        let extraTechs = assignedTechs.slice(1); // remaining techs
+                        let extraTechs = assignedTechs.slice(1);
 
                         // Create expandable dropdown if more than 1 technician
                         let techDropdownHTML = '';
                         if (extraTechs.length > 0) {
-                            let extraList = extraTechs.map(t => `<li>${t.name} (Bio ID: ${t.bioID})</li>`).join('');
+                            let extraList = extraTechs
+                                .map(t => `<li>${t.name} (Bio ID: ${t.bioID})</li>`)
+                                .join('');
+
                             techDropdownHTML = `
-                                <div class="assigned-tech-dropdown" style="display:inline-block; margin-left:5px; cursor:pointer; color:#0d6efd;">
+                                <div class="assigned-tech-dropdown" 
+                                    style="display:inline-block; margin-left:5px; cursor:pointer; color:#0d6efd;">
                                     <span class="toggle-techs">(+${extraTechs.length} more)</span>
-                                    <ul class="tech-list" style="display:none; list-style-type:none; margin:5px 0 0 0; padding-left:10px; border-left: 2px solid #0d6efd;">
+                                    <ul class="tech-list" 
+                                        style="display:none; list-style-type:none; margin:5px 0 0 0; padding-left:10px; border-left: 2px solid #0d6efd;">
                                         ${extraList}
                                     </ul>
                                 </div>
                             `;
                         }
+
 
                         if(clicked_sub_nav === 'Assigned'){
                             // recept_interval = getTimeDifference(response[i].requestDate, response[i].requestStartDate);
@@ -317,6 +333,7 @@ const dataTable_my_jobs = (what) =>{
                                 `<div><span class="request-subcategory-span">${response[i].requestSubCategory}</span></div>`,
                                 `<div class="request-button-td-div">
                                     <button class="request-action-button-myJob btn btn-secondary">View Request</button>
+                                    <button class="request-edit-action-button-myJob btn btn-secondary">Edit Request</button>
                                     <button class="request-print-button-myJob btn btn-warning">Print Form</button>
                                 </div>`,
                             ])
@@ -1065,8 +1082,11 @@ $(document).ready(function(){
         $('#start-assess-btn').text("Start Job")
         // hide the immeditiate assess button
         $('#start-assess-btn').css('display' , 'block')
-        $('#rtr-assess-btn').css('display' , 'flex')
+        $('#start-assess-btn').css('pointer-events', 'auto');
+        $('#start-assess-btn').css('opacity', '1');
 
+        $('#rtr-assess-btn').css('display' , 'flex')
+        $('#assign-assess-btn').css('display' , 'block')
         $.ajax({
             url: '../php/incoming_request_php/fetch_account_photo.php',
             method: "POST",
@@ -1361,6 +1381,147 @@ $(document).ready(function(){
         //     }
         // });
     });
+
+    $(document).on("click", ".request-edit-action-button-myJob", function () {
+        const index = $('.request-edit-action-button-myJob').index(this);
+        const data = fetch_techMyJob[index];
+        clicked_requestNo = data.requestNo;
+
+        // console.log("EDIT MY JOB:", data);
+
+        // Show the edit assignment button
+        $('#assign-assess-btn').css('display', 'flex');
+
+        /** =======================
+         *  USER INFORMATION
+         *  ======================= */
+        $('#user-name').text(data.requestBy.name);
+        $('#user-bioid').text(data.requestBy.bioID);
+        $('#user-division').text(data.requestBy.division);
+
+        let sectionName = data.requestBy.section;
+        let exactLocation = data.requestBy.exact_location;
+
+        if (sectionName === 'Integrated Hospital Operations and Management Program')
+            sectionName = 'IHOMP';
+
+        if (exactLocation === 'Integrated Hospital Operations and Management Program')
+            exactLocation = 'IHOMP';
+
+        $('#user-section').text(sectionName);
+        $('#user-exactLocation').text(exactLocation);
+
+        /** =======================
+         *  REQUEST INFO
+         *  ======================= */
+        $('#job-order-id').text(data.requestNo);
+        $('#date-requested').text(data.requestDate);
+        $('#request-type').text(data.requestCategory);
+        $('#request-description').text(data.requestDescription);
+
+        /** =======================
+         *  MODAL UI SETUP
+         *  ======================= */
+        $('.modal-title').text("User & Job Order Details");
+        $('#user-what').text("Requester");
+
+        $('.assessment-section').css('display', 'flex');
+        $('.tech-assessment-section').css('display', 'none');
+
+        $('#start-assess-btn').text("Start Job");
+        $('#start-assess-btn').css('display', 'block');
+        $('#start-assess-btn').css('pointer-events', 'auto');
+        $('#start-assess-btn').css('opacity', '1');
+        $('#rtr-assess-btn').css('display', 'flex');
+
+        /** =======================
+         *  LOAD ACCOUNT PHOTO
+         *  ======================= */
+        $.ajax({
+            url: '../php/incoming_request_php/fetch_account_photo.php',
+            method: "POST",
+            data: { bioID : data.requestBy.bioID },
+            success: function(response) {
+                const base64Data = (response.photo || "").trim();
+                const $userImage = $('#user-image');
+                $userImage.css('background-image', `url('data:image/bmp;base64,${base64Data}')`);
+                $userImage.removeClass('fa-solid fa-user');
+            },
+            error: function(xhr, status, error) {
+                console.error("Photo load failed:", error);
+            }
+        });
+
+        /** =========================
+         *  LOAD ASSIGNMENT DETAILS
+         *  ========================= */
+       $.ajax({
+            url: '../php/incoming_request_php/fetch_assigned_request.php',
+            method: "POST",
+            data: { requestNo: data.requestNo },
+            success: function(res) {
+                let response = JSON.parse(res);
+                // console.log("ASSIGNED:", response);
+
+                // Build the assign-to HTML dynamically
+               let assignHtml = `
+                    <div class="assign-details p-2 mb-2 border rounded dynamic-assign-block">
+                        <h1 class="info-heading"> Current Assigned Job Details </h1>
+                        <p><b>Assignment Description:</b> ${response.assignDescription || "N/A"}</p>
+                        <p><b>Target Start Date:</b> ${response.assignTargetStartDate || "N/A"}</p>
+                        <p><b>Target End Date:</b> ${response.assignTargetEndDate || "N/A"}</p>
+                        <p><b>Assigned By:</b> ${response.assignBy || "N/A"}</p>
+                        <p><b>Assigned To:</b> ${response.assignTo || "N/A"} (BioID: ${response.assignToBioID || "N/A"})</p>
+                    </div>
+                    <div class="assigned-tech-list p-2 border rounded dynamic-assign-block">
+                        <h6>Additional Assigned Technicians:</h6>
+                `;
+
+                if(response.technicians.length) {
+                    response.technicians.forEach(t => {
+                        assignHtml += `
+                            <div class="assigned-tech-item mb-2 p-2 border rounded">
+                                <p><b>${t.name}</b> (BioID: ${t.bioID})</p>
+                            </div>
+                        `;
+                    });
+                } else {
+                    assignHtml += `<p>No additional technicians assigned yet.</p>`;
+                }
+
+                assignHtml += `</div>`;
+
+                // Append to assign-to-div
+                $('.assign-to-div').append(assignHtml); // empty first to avoid duplicates
+                // $('.assign-to-div').append(assignHtml);
+                edit_request_clicked = true
+            },
+            error: function(xhr, status, error) {
+                console.error("AJAX request failed:", error);
+            }
+        });
+
+
+        request_modal.show();
+    });
+
+    $(document).off('click', '#close-modal-btn-request-info').on('click', '#close-modal-btn-request-info', function(e) {     
+        e.preventDefault();
+
+        $('#assign-assess-btn').css('display', 'none');
+        $('#cancel-assign-assess-btn').css('display', 'none');
+
+        $('.assign-to-div')?.css('display', 'none');
+        $('.assign-to-div .dynamic-assign-block').remove();
+
+        $('#assign-assess-btn').text('Assign To');
+
+        $('#start-assess-btn').text("Start Job")
+
+        edit_request_clicked = false
+    })
+
+
 
 
     // requestCompletedDate
@@ -1750,6 +1911,10 @@ $(document).ready(function(){
                     dataTable_incoming_request();
                     fetchNotifValue();
                     request_modal.hide();
+
+                    $('#assign-to-modal-tech-remarks').val('')
+                    $('#target-start-datetime').val('')
+                    $('#target-end-datetime').val('')
                 },
                 error: function (xhr, status, error) {
                     console.error("AJAX request failed:", error);
@@ -1757,6 +1922,86 @@ $(document).ready(function(){
             });
         }
 
+        else if ($('#start-assess-btn').text() === 'Update Assignment') {
+             // Validate fields
+            let assignDesc = $('#assign-to-modal-tech-remarks').val().trim();
+            let startDate = $('#target-start-datetime').val().trim();
+            let endDate   = $('#target-end-datetime').val().trim();
+
+            if (!assignDesc || !startDate || !endDate) {
+                alert("Please fill in all required fields: description, start date, and end date.");
+                return;
+            }
+
+            // Convert start date to JS Date object
+            let startDateObj = new Date(startDate);
+            let now = new Date();
+            let minAllowed = new Date(now.getTime() + 2 * 60 * 1000); // now + 2 minutes
+
+            if (startDateObj < minAllowed) {
+                alert("The start date/time must be at least 2 minutes from now.");
+                return;
+            }
+
+            // Collect all selected technicians
+            let selectedTechs = $("#assign-tech-select option:selected").map(function () {
+                return {
+                    name: $(this).val(),       // FULL NAME is in value=""
+                    bioID: $(this).data("techbioid")
+                };
+            }).get();
+
+            if (selectedTechs.length === 0) {
+                alert("Please select at least 1 technician.");
+                return;
+            }
+
+            let postData = {
+                requestNo: clicked_requestNo,
+                assignDescription: assignDesc,
+
+                // FIRST technician is stored in old columns
+                assignTo: selectedTechs[0].name,
+                assignToBioID: selectedTechs[0].bioID,
+
+                assignStartDate: convertDate(startDate),
+                assignEndDate: convertDate(endDate),
+
+                // Send ALL techs for your new table
+                technicians: JSON.stringify(selectedTechs)
+            };
+
+            console.log(postData);
+
+            // -------------- CONFIRMATION BEFORE PROCEEDING --------------
+            if (!confirm("Are you sure you want to assign this job to the selected technicians?")) {
+                return; // STOP if cancelled
+            }
+
+            $.ajax({
+                url: '../php/incoming_request_php/edit_Assigned_Request.php',
+                method: "POST",
+                data: postData,
+                success: function (response) {
+                    console.log("UPDATE:", response);
+                    dataTable_incoming_request();
+                    fetchNotifValue();
+                    request_modal.hide();
+
+                    // reset the valaue of the inputs
+                    $('#assign-to-modal-tech-remarks').val('')
+                    $('#target-start-datetime').val('')
+                    $('#target-end-datetime').val('')
+
+                    $('.assign-to-div .dynamic-assign-block').remove();
+
+                },
+                error: function (xhr, status, error) {
+                    console.error("AJAX update failed:", error);
+                }
+            });
+
+        }
 
 
 
@@ -1803,7 +2048,12 @@ $(document).ready(function(){
             $('#assign-assess-btn').css('display', 'none');
             $('#cancel-assign-assess-btn').css('display', 'flex');
 
-            $('#start-assess-btn').text("Assign Now")
+            
+            if (!edit_request_clicked) {
+                $('#start-assess-btn').text("Assign Now");
+            } else {
+                $('#start-assess-btn').text("Update Assignment");
+            }
 
             // $('#assign-assess-btn').text('Submit Assignment');
         });
@@ -1813,12 +2063,11 @@ $(document).ready(function(){
             $('#cancel-assign-assess-btn').css('display', 'none');
 
             $('.assign-to-div')?.css('display', 'none');
-
+            // $('.assign-to-div .dynamic-assign-block').remove();
 
             $('#assign-assess-btn').text('Assign To');
 
             $('#start-assess-btn').text("Start Job")
-
          })
     }
 
@@ -1936,7 +2185,7 @@ $(document).ready(function(){
         $container.removeClass('active');
         $subBtns.removeClass('show');
 
-        clicked_sub_nav = ""
+        clicked_sub_nav = "Assigned"
     })  
 
     $(document).off("click", "#your-job-on-process-btn, #your-job-for-evaluation-btn, #your-job-completed-btn, #your-job-correction-btn, #your-job-assigned-btn ,#your-job-pending-material-btn, #your-job-for-schedule-btn").on("click", "#your-job-on-process-btn, #your-job-for-evaluation-btn, #your-job-completed-btn, #your-job-correction-btn, #your-job-assigned-btn , #your-job-pending-material-btn, #your-job-for-schedule-btn", function () {
