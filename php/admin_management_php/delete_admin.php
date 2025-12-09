@@ -1,7 +1,7 @@
 <?php
 include('../../session.php');
 include('../../assets/connection.php');
-include('../../assets/mssql_connection.php');
+// include('../../assets/mssql_connection.php');
 
 if (!isset($_POST['techBioID'])) {
     echo json_encode(["success" => false, "message" => "Missing adminID."]);

@@ -18,7 +18,14 @@ $(document).ready(function () {
                     let row = `<tr>
                         <td>${index + 1}</td>
                         <td>${update.description}</td>
-                        <td><span class="status ${update.status}">${capitalize(update.status)}</span></td>
+                        <td>
+                            <span class="status-badge status-${update.status}" 
+                                data-id="${update.id}"
+                                data-status="${update.status}">
+                                ${capitalize(update.status)}
+                            </span>
+                        </td>
+                        <td>${update.updated_at}</td>
                     </tr>`;
 
                     switch(update.status) {
@@ -158,4 +165,51 @@ $(document).ready(function () {
             }
         });
     });
+
+    $(document).on('click', '.status-badge', function () {
+        let id = $(this).data('id');
+        let currentStatus = $(this).data('status');
+
+        // Status sequence
+        let nextStatus = {
+            ongoing: "completed",
+            completed: "ongoing",
+            major: "completed",
+            minor: "completed"
+        };
+
+        if (!nextStatus[currentStatus]) {
+            alert("Status cannot be changed.");
+            return;
+        }
+
+        let newStatus = nextStatus[currentStatus];
+
+        if (!confirm(`Change status from ${currentStatus.toUpperCase()} → ${newStatus.toUpperCase()}?`)) {
+            return;
+        }
+
+        $.ajax({
+            url: '../../php/updates_php/update_status.php',
+            method: 'POST',
+            data: { id, status: newStatus },
+            dataType: 'json',
+            success: (response) => {
+                console.log(response)
+                try {
+                    if (response.success) {
+                        alert("Status updated!");
+                        fetchUpdates(); // refresh UI
+                    } else {
+                        alert("Failed: " + response.message);
+                    }
+                } catch (e) {
+                    console.error("Invalid response:", res);
+                    alert("Server error.");
+                }
+            },
+            error: () => alert("Server connection error.")
+        });
+    });
+
 });

@@ -3,7 +3,11 @@
     include('../assets/connection.php');
 
     // echo "<pre>"; print_r($_SESSION); echo "</pre>";
-    $isAdmin = ($_SESSION['user'] === 3858); 
+    $isAdmin = ($_SESSION['user'] === 3858);
+
+    // $sql = "UPDATE updates SET status='ongoing' WHERE id=1";
+    // $stmt = $pdo->prepare($sql);
+    // $stmt->execute();
 
 ?>
 
@@ -47,6 +51,7 @@
                                 <th>#</th>
                                 <th>Update Description</th>
                                 <th>Status</th>
+                                <th>Date</th>
                             </tr>
                         </thead>
                         <tbody id="ongoing-updates-body"></tbody>
@@ -62,6 +67,7 @@
                                 <th>#</th>
                                 <th>Concern Description</th>
                                 <th>Status</th>
+                                <th>Date</th>
                             </tr>
                         </thead>
                         <tbody id="major-concerns-body"></tbody>
@@ -77,6 +83,7 @@
                                 <th>#</th>
                                 <th>Concern Description</th>
                                 <th>Status</th>
+                                <th>Date</th>
                             </tr>
                         </thead>
                         <tbody id="minor-concerns-body"></tbody>
@@ -92,6 +99,7 @@
                                 <th>#</th>
                                 <th>Update Description</th>
                                 <th>Status</th>
+                                <th>Date</th>
                             </tr>
                         </thead>
                         <tbody id="completed-updates-body"></tbody>

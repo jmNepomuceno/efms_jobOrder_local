@@ -183,6 +183,20 @@ body {
     padding: 20px;
 }
 
+.status-badge {
+    cursor: pointer;
+    padding: 4px 10px;
+    border-radius: 6px;
+    color: white;
+    font-weight: 600;
+}
+
+.status-ongoing { background: #f0ad4e; }       /* yellow */
+.status-major { background: #b30000; }         /* red */
+.status-minor { background: #005fb3; }         /* blue */
+.status-completed { background: #28a745; }     /* green */
+
+
 @media (max-width: 900px) {
     .right-container { width: 100%; }
     .updates-container { width: 95%; padding: 20px; }

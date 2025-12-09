@@ -15,10 +15,7 @@ $stmt->execute([$_SESSION['user']]);
 $data = $stmt->fetch(PDO::FETCH_ASSOC);
 $pending_count = $data['pending_count'];
 
-if ($pending_count >= 1) {
-    echo "pending";
-} else {
-    // Prepare the request object
+// Prepare the request object
     $object = $_POST;
     $object["requestBy"] = [
         "name" => $_SESSION['name'],
@@ -106,4 +103,3 @@ if ($pending_count >= 1) {
     } else {
         echo "error";
     }
-}

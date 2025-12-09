@@ -1072,7 +1072,8 @@ $(document).ready(function(){
         $('#job-order-id').text(`${data.requestNo}`);
         $('#date-requested').text(data.requestDate);
         $('#request-type').text(data.requestCategory);
-    
+        $('#request-sub-type').text(data.requestSubCategory);
+        
         $('#request-description').text(data.requestDescription);
 
         $('.modal-title').text("User & Job Order Details")
