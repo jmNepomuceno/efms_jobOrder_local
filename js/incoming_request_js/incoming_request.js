@@ -370,7 +370,9 @@ const dataTable_my_jobs = (what) =>{
                         if(clicked_sub_nav === 'Evaluation'){
                             // console.log(response[i].requestEvaluationDate)
                             // response[i].requestEvaluationDate = dateFormatter(response[i].requestEvaluationDate)
-                            let rawStart = response[i].assignTargetStartDate; // "Tue, Nov 04, 2025, 11:34:25 AM"
+                            // let rawStart = response[i].assignTargetStartDate; // "Tue, Nov 04, 2025, 11:34:25 AM"
+                            let rawStart = response[i].assignTargetStartDate != null ? response[i].assignTargetStartDate : response[i].requestStartDate; // "Tue, Nov 04, 2025, 11:34:25 AM"
+
                             let rawEnd = response[i].requestEvaluationDate; // "11/04/2025 - 11:46:01 AM"
 
                             // Parse into Date objects
@@ -430,7 +432,8 @@ const dataTable_my_jobs = (what) =>{
                         }
 
                         if(clicked_sub_nav === 'Completed'){
-                            let rawStart = response[i].assignTargetStartDate; // "Tue, Nov 04, 2025, 11:34:25 AM"
+                            // let rawStart = response[i].assignTargetStartDate; // "Tue, Nov 04, 2025, 11:34:25 AM"
+                            let rawStart = response[i].assignTargetStartDate != null ? response[i].assignTargetStartDate : response[i].requestStartDate; // "Tue, Nov 04, 2025, 11:34:25 AM"
                             let rawEnd = response[i].requestEvaluationDate; // "11/04/2025 - 11:46:01 AM"
 
                             // Parse into Date objects
@@ -1364,6 +1367,12 @@ $(document).ready(function(){
     $(document).off('click', '#start-assess-btn').on('click', '#start-assess-btn', function() {     
         console.log()
         if($('#start-assess-btn').text() === 'Start Job'){
+
+            // Confirmation prompt
+            if (!confirm("Are you sure you want to start this job?")) {
+                return; // stop everything if user cancels
+            }
+
             console.log(data = {
                 requestNo : clicked_requestNo,
                 assignTo : null,
@@ -1726,6 +1735,11 @@ $(document).ready(function(){
             };
 
             console.log(postData);
+
+            // -------------- CONFIRMATION BEFORE PROCEEDING --------------
+            if (!confirm("Are you sure you want to assign this job to the selected technicians?")) {
+                return; // STOP if cancelled
+            }
 
             $.ajax({
                 url: '../php/incoming_request_php/edit_toAssignedJobs.php',

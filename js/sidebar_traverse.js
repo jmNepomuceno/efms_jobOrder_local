@@ -133,6 +133,11 @@ $(document).ready(function(){
         window.location.href = "../views/concerns.php";
     });
 
+    $('#update-sub-div').click(function(){
+        console.log('here')
+        window.location.href = "../views/updates.php";
+    });
+
     $('#logout-btn').click(function(){
         modal_logout.show()
 

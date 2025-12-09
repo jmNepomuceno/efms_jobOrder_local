@@ -11,7 +11,7 @@
 
 
     // select all
-    $sql = "SELECT * FROM efms_technicians";
+    $sql = "SELECT * FROM suggestions";
     $stmt = $pdo->prepare($sql);
     $stmt->execute();
     $admin_users = $stmt->fetchAll(PDO::FETCH_ASSOC);
