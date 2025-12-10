@@ -1338,10 +1338,20 @@ $(document).ready(function(){
                     $('#assign-by-details-txt').text(data.assignBy)
                     // $('#assign-to-details-txt').text(data.assignTo)
                     // Assuming 'data' contains the job info including 'assignedTechs'
-                    let assignedTechs = data.assignedTechs || [];
+                    let techNames = "";
 
-                    // Create a string of all technician names, separated by commas
-                    let techNames = assignedTechs.map(t => t.name).join(', ');
+                    // If multiple assigned technicians exist
+                    if (data.assignedTechs && data.assignedTechs.length > 0) {
+                        techNames = data.assignedTechs.map(t => t.name).join(', ');
+                    }
+                    // If only ONE assigned technician (assignTo)
+                    else if (data.assignTo && data.assignTo.trim() !== "") {
+                        techNames = data.assignTo;
+                    }
+                    // If no technician assigned
+                    else {
+                        techNames = "No assigned technician";
+                    }
 
                     // Set it as the text of the element
                     $('#assign-to-details-txt').text(techNames);
