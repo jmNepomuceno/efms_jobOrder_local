@@ -13,6 +13,13 @@ const checkNotif_incominRequest = () => {
     });
 }
 
+const checkNotif_updates = () => {
+    if(update_count > 0){
+        $('#notif-value-updates').text(update_count);
+        $('#notif-value-updates').css('display', 'flex');
+    }
+}
+
 
 // // Optional: only run if socket is defined
 // if (typeof socket !== 'undefined') {
@@ -36,7 +43,7 @@ const checkNotif_incominRequest = () => {
 
 $(document).ready(function(){
     checkNotif_incominRequest()
-
+    checkNotif_updates()
 
     // console.log(view)
     $(`#${view}`).css('background','#5a4038')

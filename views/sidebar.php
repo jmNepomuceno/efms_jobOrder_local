@@ -56,6 +56,12 @@
     $stmt->execute();
     $incoming_request_count = $stmt->fetch(PDO::FETCH_ASSOC);
     $incoming_request_count = $incoming_request_count['count'];
+
+    $sql = "SELECT COUNT(*) as count FROM updates WHERE status='completed'";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute();
+    $update_count = $stmt->fetch(PDO::FETCH_ASSOC);
+    $update_count = $update_count['count'];
 ?>
     <div class="left-container">
         <div class="home-name-div">
@@ -149,7 +155,7 @@
                 <div class="side-bar-routes" id="update-sub-div">
                     <i class="fa-solid fa-box"></i>
                     <span>Updates</span>
-                    <!-- <i id="adminmanage-arrow" class="fa-solid fa-caret-down"></i> -->
+                    <span id="notif-value-updates">0</span>
                 </div>
             <?php }; ?>
 
@@ -196,6 +202,7 @@
         var sub_view = "<?php echo $sub_view ?>";
         
         var incoming_request_count = <?php echo $incoming_request_count ?>;
+        var update_count = <?php echo $update_count ?>;
         // const audio = new Audio('../source/sound/shopee.mp3'); // Load the notification sound
         // let previousResponse = 0; // Store the previous count to prevent duplicate sounds
 

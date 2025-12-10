@@ -71,7 +71,8 @@ body .left-container .side-bar-route .side-bar-routes span {
     font-weight: 600;
 }
 
-body .left-container .side-bar-route .side-bar-routes #notif-value {
+body .left-container .side-bar-route .side-bar-routes #notif-value,
+body .left-container .side-bar-route .side-bar-routes #notif-value-updates {
     margin-left: 20px;
     border-radius: 50%;
     color: #fff;
@@ -227,7 +228,8 @@ body .left-container .side-bar-route .side-bar-routes #dashboard-arrow{
         font-size: 0.7rem;
     }
 
-    body .left-container .side-bar-route .side-bar-routes #notif-value{
+    body .left-container .side-bar-route .side-bar-routes #notif-value,
+    body .left-container .side-bar-route .side-bar-routes #notif-value-updates{
         padding:0 7px 0 7px;
         font-size: 0.9rem;
     }

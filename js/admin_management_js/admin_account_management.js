@@ -191,8 +191,6 @@ $(document).ready(function(){
             }
         });
     });
-
-
 });
 
 var fetch_dataTable = () => {
