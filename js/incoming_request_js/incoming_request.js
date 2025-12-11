@@ -6,6 +6,9 @@ let clicked_requestNo = 0, clicked_requestNo_myJob = 0;
 let clicked_tech_assess_textarea = ""
 let clicked_sub_nav = "Assigned"
 let edit_request_clicked = false;
+let printWindow;
+let pendingPrintWindow = null;
+
 
 const dateFormatter = (originalDate) =>{
     const dateParts = originalDate.split(" - ");
@@ -756,10 +759,14 @@ const convertDate = (rawDate) =>{
 }
 
 function printRequestForm() {
-    const printContents = document.getElementById("printable-area").innerHTML;
-    const printWindow = window.open('', '', 'width=900,height=700');
+    if (!pendingPrintWindow) {
+        alert("Print window was blocked. Please allow pop-ups.");
+        return;
+    }
 
-    printWindow.document.write(`
+    const printContents = document.getElementById("printable-area").innerHTML;
+
+    pendingPrintWindow.document.write(`
         <html>
             <head>
                 <title>EFMS Job Order Printout</title>
@@ -909,12 +916,13 @@ function printRequestForm() {
         </html>
     `);
 
-    printWindow.document.close();
-    printWindow.focus();
+    pendingPrintWindow.document.close();
+    pendingPrintWindow.focus();
 
     setTimeout(() => {
-        printWindow.print();
-        printWindow.close();
+        pendingPrintWindow.print();
+        pendingPrintWindow.close();
+        pendingPrintWindow = null;
     }, 500);
 }
 
@@ -1105,6 +1113,8 @@ $(document).ready(function(){
             }
         });
 
+        $('#start-assess-btn').css('display' , 'none')
+
         request_modal.show();
     });
     
@@ -1225,6 +1235,14 @@ $(document).ready(function(){
     });
 
     $(document).off('click', '.request-print-button-myJob').on('click', '.request-print-button-myJob', function() {
+        pendingPrintWindow = window.open('', '', 'width=900,height=700');
+
+        // If popup still blocked — notify user
+        if (!pendingPrintWindow) {
+            alert("Please allow pop-ups to enable printing.");
+            return;
+        }
+
         const index = $('.request-print-button-myJob').index(this);     
         const data = fetch_techMyJob[index];
         clicked_requestNo_myJob = data.requestNo
@@ -1512,7 +1530,7 @@ $(document).ready(function(){
             }
         });
 
-
+        $('#start-assess-btn').css('display' , 'none')
         request_modal.show();
     });
 
@@ -2058,7 +2076,8 @@ $(document).ready(function(){
             // change its class
             $('#assign-assess-btn').css('display', 'none');
             $('#cancel-assign-assess-btn').css('display', 'flex');
-
+            
+            $('#start-assess-btn').css('display' , 'block')
             
             if (!edit_request_clicked) {
                 $('#start-assess-btn').text("Assign Now");
@@ -2079,6 +2098,9 @@ $(document).ready(function(){
             $('#assign-assess-btn').text('Assign To');
 
             $('#start-assess-btn').text("Start Job")
+
+            $('#start-assess-btn').css('display' , 'none')
+
          })
     }
 
@@ -2258,4 +2280,269 @@ $(document).ready(function(){
     //     // Optional debounce can be added
     //     dataTable_my_jobs(clicked_sub_nav);
     // });
+
+    function fillPrintArea(data, response) {
+        $('#user-name').text(data.requestBy.name);
+        $('#user-bioid').text(data.requestBy.bioID);
+        $('#user-division').text(data.requestBy.division);
+
+        let sectionName = data.requestBy.section;
+        let exactLocation = data.requestBy.exact_location;
+
+        if (sectionName === 'Integrated Hospital Operations and Management Program') sectionName = 'IHOMP';
+        if (exactLocation === 'Integrated Hospital Operations and Management Program') exactLocation = 'IHOMP';
+
+        $('#user-section').text(sectionName);
+        $('#user-exactLocation').text(exactLocation);
+
+        $('#job-order-id').text(data.requestNo);
+        $('#date-requested').text(data.requestDate);
+        $('#request-type').text(data.requestCategory);
+        $('#request-sub-type').text(data.requestSubCategory);
+        $('#request-description').text(data.requestDescription);
+
+        $('#signature-tech-position').text(response.tech_position);
+        $('#signature-tech-name').text(data.assignTo || data.processedBy);
+        $('#signature-tech-bioID').text(data.assignToBioID || data.processedByID);
+
+        $('#signature-user-position').text(response.user_position);
+        $('#signature-user-name').text(data.requestBy.name);
+        $('#signature-user-bioID').text(data.requestBy.bioID);
+
+        $('#assign-by-details-txt').text(data.assignBy);
+
+        let techNames = "";
+        if (data.assignedTechs && data.assignedTechs.length > 0)
+            techNames = data.assignedTechs.map(t => t.name).join(', ');
+        else if (data.assignTo)
+            techNames = data.assignTo;
+        else
+            techNames = "No assigned technician";
+
+        $('#assign-to-details-txt').text(techNames);
+
+        $('#target-start-datetime-details').text(data.assignTargetStartDate);
+        $('#target-end-datetime-details').text(data.assignTargetEndDate);
+    }
+
+    $("#print-all-btn").on("click", async function () {
+
+        if (!fetch_techMyJob || fetch_techMyJob.length === 0) {
+            alert("No job orders to print.");
+            return;
+        }
+
+        // --- OPEN POPUP FIRST (allowed since user clicked a button)
+        const printWin = window.open('', '', 'width=900,height=700');
+        const printContents = document.getElementById("printable-area").innerHTML;
+
+        if (!printWin) {
+            alert("Please allow pop-ups to print all job orders.");
+            return;
+        }
+
+        // Start the document
+        printWin.document.write(`
+        <html>
+            <head>
+                <title>EFMS Job Order Printout</title>
+                <style>
+                    body {
+                        font-family: Arial, sans-serif;
+                        margin: 25px;
+                        color: #333;
+                    }
+
+                    /* Header Title */
+
+                    h5.info-heading {
+                        background: #5a362d;
+                        color: black;
+                        border-radius: 5px;
+                        font-size: 1.2rem;
+                        margin-top:0;
+                    }
+
+                    .main-information {
+                        display: flex;
+                        justify-content: space-between;
+                        gap: 20px;
+                        margin-bottom: 15px;
+                    }
+
+                    .user-info, .job-order-info {
+                        border: 1px solid #ccc;
+                        border-radius: 8px;
+                        padding: 10px;
+                        width: 48%;
+                        box-sizing: border-box;
+                    }
+
+                    .user-details p,
+                    .job-order-info p {
+                        margin: 5px 0;
+                    }
+
+                    .request-description,
+                    .tech-assessment-section,
+                    .assigned-details-section,
+                    .assign-to-div {
+                        border: 1px solid #ccc;
+                        border-radius: 8px;
+                        margin-top: 15px;
+                        height:100px;
+                        padding:5px;
+
+                        display:flex;
+                        flex-direction: column;
+                        justify-content: flex-start;
+                        align-items: flex-start;
+                    }
+
+                    .assigned-details-section{
+                        height:150px;
+                    }
+
+                    .assigned-info-assessment{
+                        display:flex;
+                        flex-direction: column;
+                        justify-content: flex-start;
+                        align-items: flex-start;
+                        gap:5px;
+
+                        font-size:0.8rem;
+                    }
+
+
+                    .request-description h5{
+                        padding:0 !important;
+                        margin:0 !important;
+                    }
+
+                    .user-details, .job-order-info, .request-description, .tech-assessment-section {
+                        font-size: 14px;
+                    }
+
+                    .assign-to-div{
+                        display:none;
+                    }
+
+                    /* Hide technician name & reception date row */
+                    .tech-info-assessment {
+                        display: none !important;
+                    }
+
+                    /* Hide all interactive elements */
+                    textarea, select, input[type=datetime-local], button {
+                        display: none !important;
+                    }
+
+                    .tech-assessment-section h5{
+                        padding:0 !important;
+                        margin:0 !important;
+                    }
+
+                    .tech-remarks-textarea{
+                        display:flex !important;
+                        width:100%;
+                        height:auto !important;
+                        font-size:14px;
+                        font-family: Arial, sans-serif;
+                        border:none;
+                        resize: none;
+                    }
+
+                    textarea::placeholder {
+                        color: transparent !important;
+                    }
+
+                    .function-btn,
+                    .assessment-section,
+                    .tech-btns {
+                        display: none !important;
+                    }
+
+                    @media print {
+                        .signature-section {
+                            margin-top: 10px;
+                            font-size: 14px;
+                        }
+
+                        .signature-section table {
+                            width: 100%;
+                            border-collapse: collapse;
+                        }
+
+                        .signature-section td {
+                            padding-top: 40px;
+                        }
+                        .print-header img {
+                            height: 80px;
+                        }
+
+                        .print-header {
+                            margin-bottom: 30px;
+                        }
+                    }  
+                </style>
+            </head>
+            <body>
+                ${printContents}
+            </body>
+        </html>
+    `);
+
+
+        for (let i = 0; i < fetch_techMyJob.length; i++) {
+            const data = fetch_techMyJob[i];
+
+            // --- Fetch positions async ---
+            await new Promise((resolve) => {
+                $.ajax({
+                    url: '../php/incoming_request_php/fetch_position_myJobs.php',
+                    method: "POST",
+                    data: {
+                        user_bioID: data.requestBy.bioID,
+                        tech_bioID: data.assignToBioID ? data.assignToBioID : data.processedByID
+                    },
+                    dataType: 'json',
+                    success: function (response) {
+
+                        // Temporarily fill the hidden print area
+                        fillPrintArea(data, response);
+
+                        // Get printable HTML
+                        const htmlToPrint = document.getElementById("printable-area").innerHTML;
+
+                        // Append to print window
+                        printWin.document.write(`
+                            <div class="print-section">
+                                ${htmlToPrint}
+                            </div>
+                            <div class="page-break"></div>
+                        `);
+
+                        resolve();
+                    },
+                    error: function () {
+                        resolve();
+                    }
+                });
+            });
+        }
+
+        // Close document and print
+        printWin.document.write(`</body></html>`);
+        printWin.document.close();
+
+        // Delay to allow rendering
+        setTimeout(() => {
+            printWin.print();
+            printWin.close();
+        }, 500);
+    });
+
+
+
+
 })

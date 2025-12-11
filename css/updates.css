@@ -196,6 +196,12 @@ body {
 .status-minor { background: #005fb3; }         /* blue */
 .status-completed { background: #28a745; }     /* green */
 
+.update-instruction {
+    font-size: 0.9rem;
+    color: #555;
+    margin-bottom: 10px;
+    text-decoration: underline;
+}
 
 @media (max-width: 900px) {
     .right-container { width: 100%; }

@@ -11,7 +11,7 @@
 
 
     // select all
-    $sql = "SELECT * FROM job_order_request";
+    $sql = "SELECT * FROM updates";
     $stmt = $pdo->prepare($sql);
     $stmt->execute();
     $admin_users = $stmt->fetchAll(PDO::FETCH_ASSOC);

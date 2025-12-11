@@ -17,6 +17,7 @@ $(document).ready(function(){
         // Handle each button's unique behavior
         switch (id) {
             case 'diagnosis-btn':
+                $('#start-assess-btn').css('display' , 'none')
                 $('.assessment-textarea').attr('placeholder', 'Enter diagnosis details...');
                 $('#start-assess-btn').text("Start Job");
                 $('#start-assess-btn').css({ 'pointer-events': 'auto', 'opacity': '1' });
@@ -25,6 +26,7 @@ $(document).ready(function(){
                 break;
 
             case 'correction-btn':
+                $('#start-assess-btn').css('display' , 'block')
                 $('.assessment-textarea').attr('placeholder', 'Enter correction details...');
                 $('#start-assess-btn').text("Send");
                 // start button disabled for correction
@@ -33,12 +35,14 @@ $(document).ready(function(){
                 break;
 
             case 'pending-material-btn':
+                $('#start-assess-btn').css('display' , 'block')
                 $('.assessment-textarea').attr('placeholder', 'Enter pending materials details...');
                 $('#start-assess-btn').text("Mark as Pending");
                 $('#start-assess-btn').css({ 'pointer-events': 'auto', 'opacity': '1' });
                 break;
 
             case 'for-schedule-btn':
+                $('#start-assess-btn').css('display' , 'block')
                 $('.assessment-textarea').attr('placeholder', 'Enter scheduling details...');
                 $('#start-assess-btn').text("Set Schedule");
                 $('#start-assess-btn').css({ 'pointer-events': 'auto', 'opacity': '1' });

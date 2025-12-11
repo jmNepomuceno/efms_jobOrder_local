@@ -212,4 +212,32 @@ $(document).ready(function () {
         });
     });
 
+    // Handle Major / Minor / Reject actions
+    $(document).on("click", ".major-btn, .minor-btn, .reject-btn", function () {
+        let rowData = table.row($(this).closest("tr")).data();
+        let id = rowData.id;
+
+        let action = $(this).hasClass("major-btn") ? "major"
+                : $(this).hasClass("minor-btn") ? "minor"
+                : "reject";
+
+        if (!confirm(`Are you sure you want to mark this as ${action.toUpperCase()}?`)) return;
+
+        $.ajax({
+            url: '../../php/updates_php/update_suggestion_status.php',
+            method: 'POST',
+            data: { id, action },
+            dataType: 'json',
+            success: function(res) {
+                alert(res.message);
+                table.ajax.reload();
+                fetchUpdates(); // refresh major/minor sections
+            },
+            error: function() {
+                alert("Server error.");
+            }
+        });
+    });
+
+
 });

@@ -42,6 +42,25 @@
                 <h2 class="page-title">System Development Updates</h2>
                 <p class="page-subtitle">Overview of ongoing, major, minor, and completed updates</p>
 
+                <!-- Completed Updates -->
+                <div class="update-section">
+                    <h3 class="section-title completed">Completed & Functional Updates</h3>
+                    <p class="update-instruction">
+                        Kindly refresh the webpage to take effect the updates.
+                    </p>
+                    <table class="updates-table">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Update Description</th>
+                                <th>Status</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody id="completed-updates-body"></tbody>
+                    </table>
+                </div>
+
                 <!-- Ongoing Updates -->
                 <div class="update-section">
                     <h3 class="section-title ongoing">Ongoing Updates</h3>
@@ -87,22 +106,6 @@
                             </tr>
                         </thead>
                         <tbody id="minor-concerns-body"></tbody>
-                    </table>
-                </div>
-
-                <!-- Completed Updates -->
-                <div class="update-section">
-                    <h3 class="section-title completed">Completed & Functional Updates</h3>
-                    <table class="updates-table">
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Update Description</th>
-                                <th>Status</th>
-                                <th>Date</th>
-                            </tr>
-                        </thead>
-                        <tbody id="completed-updates-body"></tbody>
                     </table>
                 </div>
 
