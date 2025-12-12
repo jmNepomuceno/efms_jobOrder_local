@@ -536,6 +536,8 @@ body .right-container .table-div .table-container #incoming-req-table tbody tr t
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
+
+    color:black;
 }
 
 #user-info-modal .modal-body .tech-assessment-section .tech-info-assessment{

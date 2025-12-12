@@ -53,15 +53,11 @@
     // $stmt = $pdo->prepare($sql);
     // $stmt->execute();
 
-        $sql = "UPDATE job_order_request SET requestStatus='Pending', processedBy=null, requestCorrectionDate=null, requestCorrection=null, requestJobRemarks=null, assignTo=NULL, assignBy=NULL, assignToBioID=NULL, assignTargetStartDate=NULL, assignTargetEndDate=NULL, processedByID=NULL, requestStartDate=NULL, requestEvaluationDate=NULL, requestCompletedDate=NULL WHERE requestID=242";
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute();
-
-    //     $sql = "UPDATE job_order_request SET requestStatus='Pending', processedBy=null, requestCorrectionDate=null, requestCorrection=null, requestJobRemarks=null, assignTo=NULL, assignBy=NULL, assignToBioID=NULL, assignTargetStartDate=NULL, assignTargetEndDate=NULL, processedByID=NULL, requestPendingMaterials=NULL, requestForSched=NULL, requestPendingMaterialsDate=NULL, requestForSchedDate=NULL, requestStartDate=NULL, requestEvaluationDate=NULL, requestCompletedDate=NULL WHERE requestID=236";
+    // $sql = "UPDATE job_order_request SET requestStatus='Pending', processedBy=null, requestCorrectionDate=null, requestCorrection=null, requestJobRemarks=null, assignTo=NULL, assignBy=NULL, assignToBioID=NULL, assignTargetStartDate=NULL, assignTargetEndDate=NULL, processedByID=NULL, requestStartDate=NULL, requestEvaluationDate=NULL, requestCompletedDate=NULL WHERE requestID=242";
     // $stmt = $pdo->prepare($sql);
     // $stmt->execute();
 
-    // $sql = "DELETE FROM job_order_assigned_techs WHERE requestNo='IU-2025-12-001'";
+    // $sql = "DELETE FROM job_order_assigned_techs WHERE requestNo='IU-2025-12-007'";
     // $stmt = $pdo->prepare($sql);
     // $stmt->execute();
 
@@ -374,7 +370,7 @@
                             <!-- <button id="pending-material-assess-btn" class="btn btn-success">Pending Material Assessment</button> -->
                             <!-- <button id="for-schedule-assess-btn" class="btn btn-success">For Schedule Assessment</button> -->
                             <button id="start-assess-btn" class="btn btn-success">Start Job</button>
-                            <?php if ($_SESSION['role'] === 'unit_admin' || $_SESSION['role'] === 'super_admin'): ?>
+                            <?php if ($_SESSION['role'] === 'unit_admin' || $_SESSION['role'] === 'super_admin' || $_SESSION['role'] === 'unit_semi_admin'): ?>
                                 <button id="assign-assess-btn" class="btn btn-secondary">Assign To</button>
                                 <button id="cancel-assign-assess-btn" class="btn btn-secondary" style="display:none;">Cancel Assignment</button>
                             <?php endif; ?>

@@ -1,4 +1,5 @@
 let request_modal = new bootstrap.Modal(document.getElementById('user-info-modal'));
+let clicked_sub_nav = "assigned"
 
 const fetchNotifValue = () =>{
     $.ajax({
@@ -186,7 +187,7 @@ const _init = () =>{
             
             // Add 'active' to the clicked button
             button.classList.add('active');
-
+            clicked_sub_nav = button.getAttribute('data-status');
             // Get the data-status attribute value
             let status = button.getAttribute('data-status');
             if(status === 'Completed'){
@@ -271,7 +272,20 @@ $(document).ready(function(){
         $('.modal-title').text("User & Job Order Details")
         $('#user-what').text("Requester")
         $('.assessment-section').css('display' , 'flex')
-        $('.tech-assessment-section').css('display' , 'none')
+
+        if(clicked_sub_nav === "On-Process"){
+            $('.tech-assessment-section').css('display' , 'flex')
+            $('.tech-remarks-textarea').val("")
+            $('#finish-assess-btn').css('display' , 'block')
+        }
+        else if(clicked_sub_nav === "Completed"){
+            $('.tech-assessment-section').css('display' , 'none')
+            $('#finish-assess-btn').css('display' , 'none')
+        }
+        else{
+            $('.tech-assessment-section').css('display' , 'none')
+        }
+
         $('#start-assess-btn').text("Start Job")
         $('#start-assess-btn').css('display' , 'flex')
         $('#rtr-assess-btn').css('display' , 'flex')
@@ -295,4 +309,80 @@ $(document).ready(function(){
 
         request_modal.show();
     });
+
+    $(document).off('click', '#finish-assess-btn').on('click', '#finish-assess-btn', function() {
+        console.log(clicked_requestNo)
+        try {
+            $.ajax({
+                url: '../php/incoming_request_php/edit_toEvaluation_req.php',
+                method: "POST",
+                data: {
+                    requestNo: clicked_requestNo,
+                    requestJobRemarks: $('.tech-remarks-textarea').val()
+                },
+                dataType: "json",
+                success: function(response) {
+                    try { 
+                        // Update table and modal
+                        dataTable_incoming_request("On-Process");
+                        request_modal.hide();
+
+                        console.log(response);
+
+                        // ✅ Show success Swal
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Request Updated!',
+                            text: 'The job has been successfully moved to Evaluation.',
+                            timer: 2000,
+                            showConfirmButton: false
+                        });
+
+                        // Update notification counts
+                        if (response.count_yourJob > 0) {
+                            $('#your-job-notif-span').text(response.count_yourJob).show();
+                        } else {
+                            $('#your-job-notif-span').text(0).hide();
+                        }
+
+                        if (response.count_onProcess > 0) {
+                            $('#on-process-notif-span').text(response.count_onProcess).show();
+                        } else {
+                            $('#on-process-notif-span').text(0).hide();
+                        }
+
+                        if (response.count_evaluation > 0) {
+                            $('#for-evaluation-notif-span').text(response.count_evaluation).show();
+                        } else {
+                            $('#for-evaluation-notif-span').text(0).hide();
+                        }
+
+                    } catch (innerError) {
+                        console.error("Error processing response:", innerError);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Processing Error',
+                            text: 'Something went wrong while updating the UI.'
+                        });
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error("AJAX request failed:", error);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Update Failed',
+                        text: 'Unable to move request to Evaluation. Please try again.'
+                    });
+                }
+            });
+        } catch (ajaxError) {
+            console.error("Unexpected error occurred:", ajaxError);
+            Swal.fire({
+                icon: 'error',
+                title: 'Unexpected Error',
+                text: 'An unexpected error occurred. Please refresh and try again.'
+            });
+        }
+    })
+
 })

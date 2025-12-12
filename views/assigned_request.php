@@ -143,7 +143,23 @@
                             The workstation in the accounting office has encountered a persistent issue where the system fails to load critical accounting software.
                         </p>
                     </div>
+
+                    <div class="tech-assessment-section">
+                        <h5 class="info-heading">Technician Remarks Details</h5>
+                        <div class="tech-info-assessment">
+                            <span><b>Technician Name:</b> <i id="tech-name-i"></i></span>
+                            <span><b>Reception Date:</b> <i id="reception-date-i"></i></span>
+                        </div>
+                        <textarea class="tech-remarks-textarea" placeholder="Enter remarks details...">
+                        </textarea>
+                    </div>
+
+                     <div class="function-btn">
+                        <button id="finish-assess-btn" class="btn btn-success">Finish Job</button>
+                    </div>
                 </div>
+
+               
 
                 <!-- Modal Footer -->
                 <div class="modal-footer">
