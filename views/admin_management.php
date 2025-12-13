@@ -1,7 +1,7 @@
 <?php 
     include('../session.php');
     include('../assets/connection.php');
-    // include('../assets/mssql_connection.php');
+    include('../assets/mssql_connection.php');
 
     $sql = "SELECT techBioID, firstName, lastName, middle, techCategory, role FROM efms_technicians";
     $stmt = $pdo->prepare($sql);

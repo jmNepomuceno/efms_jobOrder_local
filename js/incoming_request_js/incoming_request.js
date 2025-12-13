@@ -5,10 +5,8 @@ let fetch_requestData, fetch_techMyJob;
 let clicked_requestNo = 0, clicked_requestNo_myJob = 0;
 let clicked_tech_assess_textarea = ""
 let clicked_sub_nav = "Assigned"
-let edit_request_clicked = false;
-let printWindow;
-let pendingPrintWindow = null;
 
+let edit_request_clicked = false;
 
 const dateFormatter = (originalDate) =>{
     const dateParts = originalDate.split(" - ");
@@ -266,6 +264,7 @@ const dataTable_my_jobs = (what) =>{
                         // $('#your-job-notif-span').text(parseInt(response.length))
                         // $('#your-job-notif-span').css('display' , 'block')
 
+
                         let assignedTechs = response[i].assignedTechs || [];
 
                         // If assignedTechs is empty but old columns exist, convert them into array form
@@ -297,7 +296,6 @@ const dataTable_my_jobs = (what) =>{
                                 </div>
                             `;
                         }
-
 
                         if(clicked_sub_nav === 'Assigned'){
                             // recept_interval = getTimeDifference(response[i].requestDate, response[i].requestStartDate);
@@ -390,9 +388,7 @@ const dataTable_my_jobs = (what) =>{
                         if(clicked_sub_nav === 'Evaluation'){
                             // console.log(response[i].requestEvaluationDate)
                             // response[i].requestEvaluationDate = dateFormatter(response[i].requestEvaluationDate)
-                            // let rawStart = response[i].assignTargetStartDate; // "Tue, Nov 04, 2025, 11:34:25 AM"
                             let rawStart = response[i].assignTargetStartDate != null ? response[i].assignTargetStartDate : response[i].requestStartDate; // "Tue, Nov 04, 2025, 11:34:25 AM"
-
                             let rawEnd = response[i].requestEvaluationDate; // "11/04/2025 - 11:46:01 AM"
 
                             // Parse into Date objects
@@ -435,7 +431,7 @@ const dataTable_my_jobs = (what) =>{
                                     <span><b>Target End Date</b>: ${response[i].assignTargetEndDate}</span>
                                     <span><b>Assigned By</b>: ${response[i].assignBy}</span>
                                     <span id="final-completion-time"><b>Completion Time</b>: ${response[i].requestEvaluationDate}</span>
-                                    <span style='${style}'><b>Turn-around Time: </b> ${formattedTimeDiff} </span>
+                                    <span style=><b>Tu'${style}'rn-around Time: </b> ${formattedTimeDiff} </span>
                                 </div>`,
                                 `<div class="request-date-td-div">
                                     <span><b>Requested Date:</b> ${response[i].requestDate}</span>
@@ -452,7 +448,6 @@ const dataTable_my_jobs = (what) =>{
                         }
 
                         if(clicked_sub_nav === 'Completed'){
-                            // let rawStart = response[i].assignTargetStartDate; // "Tue, Nov 04, 2025, 11:34:25 AM"
                             let rawStart = response[i].assignTargetStartDate != null ? response[i].assignTargetStartDate : response[i].requestStartDate; // "Tue, Nov 04, 2025, 11:34:25 AM"
                             let rawEnd = response[i].requestEvaluationDate; // "11/04/2025 - 11:46:01 AM"
 
@@ -759,14 +754,10 @@ const convertDate = (rawDate) =>{
 }
 
 function printRequestForm() {
-    if (!pendingPrintWindow) {
-        alert("Print window was blocked. Please allow pop-ups.");
-        return;
-    }
-
     const printContents = document.getElementById("printable-area").innerHTML;
+    const printWindow = window.open('', '', 'width=900,height=700');
 
-    pendingPrintWindow.document.write(`
+    printWindow.document.write(`
         <html>
             <head>
                 <title>EFMS Job Order Printout</title>
@@ -916,13 +907,12 @@ function printRequestForm() {
         </html>
     `);
 
-    pendingPrintWindow.document.close();
-    pendingPrintWindow.focus();
+    printWindow.document.close();
+    printWindow.focus();
 
     setTimeout(() => {
-        pendingPrintWindow.print();
-        pendingPrintWindow.close();
-        pendingPrintWindow = null;
+        printWindow.print();
+        printWindow.close();
     }, 500);
 }
 
@@ -1049,14 +1039,16 @@ $(document).ready(function(){
     // }, 10000); // 10 seconds (10000ms)
 
 
-    $(document).off('click', '.request-action-button').on('click', '.request-action-button', function() {     
+    $(document).off('click', '.request-action-button').on('click', '.request-action-button', function() {        
         $('.tech-btns button').css('opacity', '0.5');  
         $('#diagnosis-btn').css('opacity', '1');
-
         // fetch data-photo
         console.log(491)
-        const index = $('.request-action-button').index(this);
+        const table = $('#incoming-req-table').DataTable()
+        // const index = $('.request-action-button').index(this);
+        const index = table.row($(this).closest('tr')).index();
         console.log(index)
+        console.log(fetch_requestData)
         const data = fetch_requestData[index];
         clicked_requestNo = data.requestNo
         console.log(data)
@@ -1092,13 +1084,13 @@ $(document).ready(function(){
         $('.assessment-section').css('display' , 'flex')
         $('.tech-assessment-section').css('display' , 'none')
         $('#start-assess-btn').text("Start Job")
-        // hide the immeditiate assess button
         $('#start-assess-btn').css('display' , 'block')
         $('#start-assess-btn').css('pointer-events', 'auto');
         $('#start-assess-btn').css('opacity', '1');
-
+        // hide the immeditiate assess button
+        $('#start-assess-btn').css('display' , 'block')
         $('#rtr-assess-btn').css('display' , 'flex')
-        $('#assign-assess-btn').css('display' , 'block')
+
         $.ajax({
             url: '../php/incoming_request_php/fetch_account_photo.php',
             method: "POST",
@@ -1115,12 +1107,9 @@ $(document).ready(function(){
                 console.error("AJAX request failed:", error);
             }
         });
-
         $('#start-assess-btn').css('display' , 'none')
-
         request_modal.show();
     });
-    
 
     $(document).off('click', '.request-action-button-myJob').on('click', '.request-action-button-myJob', function() {
         const index = $('.request-action-button-myJob').index(this);     
@@ -1238,14 +1227,6 @@ $(document).ready(function(){
     });
 
     $(document).off('click', '.request-print-button-myJob').on('click', '.request-print-button-myJob', function() {
-        pendingPrintWindow = window.open('', '', 'width=900,height=700');
-
-        // If popup still blocked — notify user
-        if (!pendingPrintWindow) {
-            alert("Please allow pop-ups to enable printing.");
-            return;
-        }
-
         const index = $('.request-print-button-myJob').index(this);     
         const data = fetch_techMyJob[index];
         clicked_requestNo_myJob = data.requestNo
@@ -1375,6 +1356,7 @@ $(document).ready(function(){
                     }
 
                     // Set it as the text of the element
+                    console.log(techNames)
                     $('#assign-to-details-txt').text(techNames);
 
                     $('#target-start-datetime-details').text(data.assignTargetStartDate)
@@ -1414,10 +1396,10 @@ $(document).ready(function(){
         // });
     });
 
-    $(document).on("click", ".request-edit-action-button-myJob", function () {
+     $(document).on("click", ".request-edit-action-button-myJob", function () {
         $('.tech-btns button').css('opacity', '0.5');  
         $('#diagnosis-btn').css('opacity', '1');
-
+        
         const index = $('.request-edit-action-button-myJob').index(this);
         const data = fetch_techMyJob[index];
         clicked_requestNo = data.requestNo;
@@ -1558,17 +1540,13 @@ $(document).ready(function(){
 
 
 
-
     // requestCompletedDate
     $(document).off('click', '#start-assess-btn').on('click', '#start-assess-btn', function() {     
-        console.log()
+        if (!confirm("Are you sure you want to start this job?")) {
+            return; // stop everything if user cancels
+        }
+
         if($('#start-assess-btn').text() === 'Start Job'){
-
-            // Confirmation prompt
-            if (!confirm("Are you sure you want to start this job?")) {
-                return; // stop everything if user cancels
-            }
-
             console.log(data = {
                 requestNo : clicked_requestNo,
                 assignTo : null,
@@ -1932,7 +1910,6 @@ $(document).ready(function(){
 
             console.log(postData);
 
-            // -------------- CONFIRMATION BEFORE PROCEEDING --------------
             if (!confirm("Are you sure you want to assign this job to the selected technicians?")) {
                 return; // STOP if cancelled
             }
@@ -2040,6 +2017,7 @@ $(document).ready(function(){
 
 
 
+
     })   
 
     // assign-assess-btn
@@ -2082,9 +2060,10 @@ $(document).ready(function(){
             // change its class
             $('#assign-assess-btn').css('display', 'none');
             $('#cancel-assign-assess-btn').css('display', 'flex');
-            
+
             $('#start-assess-btn').css('display' , 'block')
-            
+
+
             if (!edit_request_clicked) {
                 $('#start-assess-btn').text("Assign Now");
             } else {
@@ -2099,13 +2078,14 @@ $(document).ready(function(){
             $('#cancel-assign-assess-btn').css('display', 'none');
 
             $('.assign-to-div')?.css('display', 'none');
-            // $('.assign-to-div .dynamic-assign-block').remove();
+
 
             $('#assign-assess-btn').text('Assign To');
 
             $('#start-assess-btn').text("Start Job")
 
             $('#start-assess-btn').css('display' , 'none')
+
 
          })
     }
@@ -2184,7 +2164,7 @@ $(document).ready(function(){
     
     $(document).off('click', '#request-list-btn').on('click', '#request-list-btn', function() {
         $('.table-container').css('height' , '720px')
-
+        
         dataTable_incoming_request()
 
         let winHeight = $(window).height();
@@ -2286,269 +2266,4 @@ $(document).ready(function(){
     //     // Optional debounce can be added
     //     dataTable_my_jobs(clicked_sub_nav);
     // });
-
-    function fillPrintArea(data, response) {
-        $('#user-name').text(data.requestBy.name);
-        $('#user-bioid').text(data.requestBy.bioID);
-        $('#user-division').text(data.requestBy.division);
-
-        let sectionName = data.requestBy.section;
-        let exactLocation = data.requestBy.exact_location;
-
-        if (sectionName === 'Integrated Hospital Operations and Management Program') sectionName = 'IHOMP';
-        if (exactLocation === 'Integrated Hospital Operations and Management Program') exactLocation = 'IHOMP';
-
-        $('#user-section').text(sectionName);
-        $('#user-exactLocation').text(exactLocation);
-
-        $('#job-order-id').text(data.requestNo);
-        $('#date-requested').text(data.requestDate);
-        $('#request-type').text(data.requestCategory);
-        $('#request-sub-type').text(data.requestSubCategory);
-        $('#request-description').text(data.requestDescription);
-
-        $('#signature-tech-position').text(response.tech_position);
-        $('#signature-tech-name').text(data.assignTo || data.processedBy);
-        $('#signature-tech-bioID').text(data.assignToBioID || data.processedByID);
-
-        $('#signature-user-position').text(response.user_position);
-        $('#signature-user-name').text(data.requestBy.name);
-        $('#signature-user-bioID').text(data.requestBy.bioID);
-
-        $('#assign-by-details-txt').text(data.assignBy);
-
-        let techNames = "";
-        if (data.assignedTechs && data.assignedTechs.length > 0)
-            techNames = data.assignedTechs.map(t => t.name).join(', ');
-        else if (data.assignTo)
-            techNames = data.assignTo;
-        else
-            techNames = "No assigned technician";
-
-        $('#assign-to-details-txt').text(techNames);
-
-        $('#target-start-datetime-details').text(data.assignTargetStartDate);
-        $('#target-end-datetime-details').text(data.assignTargetEndDate);
-    }
-
-    $("#print-all-btn").on("click", async function () {
-
-        if (!fetch_techMyJob || fetch_techMyJob.length === 0) {
-            alert("No job orders to print.");
-            return;
-        }
-
-        // --- OPEN POPUP FIRST (allowed since user clicked a button)
-        const printWin = window.open('', '', 'width=900,height=700');
-        const printContents = document.getElementById("printable-area").innerHTML;
-
-        if (!printWin) {
-            alert("Please allow pop-ups to print all job orders.");
-            return;
-        }
-
-        // Start the document
-        printWin.document.write(`
-        <html>
-            <head>
-                <title>EFMS Job Order Printout</title>
-                <style>
-                    body {
-                        font-family: Arial, sans-serif;
-                        margin: 25px;
-                        color: #333;
-                    }
-
-                    /* Header Title */
-
-                    h5.info-heading {
-                        background: #5a362d;
-                        color: black;
-                        border-radius: 5px;
-                        font-size: 1.2rem;
-                        margin-top:0;
-                    }
-
-                    .main-information {
-                        display: flex;
-                        justify-content: space-between;
-                        gap: 20px;
-                        margin-bottom: 15px;
-                    }
-
-                    .user-info, .job-order-info {
-                        border: 1px solid #ccc;
-                        border-radius: 8px;
-                        padding: 10px;
-                        width: 48%;
-                        box-sizing: border-box;
-                    }
-
-                    .user-details p,
-                    .job-order-info p {
-                        margin: 5px 0;
-                    }
-
-                    .request-description,
-                    .tech-assessment-section,
-                    .assigned-details-section,
-                    .assign-to-div {
-                        border: 1px solid #ccc;
-                        border-radius: 8px;
-                        margin-top: 15px;
-                        height:100px;
-                        padding:5px;
-
-                        display:flex;
-                        flex-direction: column;
-                        justify-content: flex-start;
-                        align-items: flex-start;
-                    }
-
-                    .assigned-details-section{
-                        height:150px;
-                    }
-
-                    .assigned-info-assessment{
-                        display:flex;
-                        flex-direction: column;
-                        justify-content: flex-start;
-                        align-items: flex-start;
-                        gap:5px;
-
-                        font-size:0.8rem;
-                    }
-
-
-                    .request-description h5{
-                        padding:0 !important;
-                        margin:0 !important;
-                    }
-
-                    .user-details, .job-order-info, .request-description, .tech-assessment-section {
-                        font-size: 14px;
-                    }
-
-                    .assign-to-div{
-                        display:none;
-                    }
-
-                    /* Hide technician name & reception date row */
-                    .tech-info-assessment {
-                        display: none !important;
-                    }
-
-                    /* Hide all interactive elements */
-                    textarea, select, input[type=datetime-local], button {
-                        display: none !important;
-                    }
-
-                    .tech-assessment-section h5{
-                        padding:0 !important;
-                        margin:0 !important;
-                    }
-
-                    .tech-remarks-textarea{
-                        display:flex !important;
-                        width:100%;
-                        height:auto !important;
-                        font-size:14px;
-                        font-family: Arial, sans-serif;
-                        border:none;
-                        resize: none;
-                    }
-
-                    textarea::placeholder {
-                        color: transparent !important;
-                    }
-
-                    .function-btn,
-                    .assessment-section,
-                    .tech-btns {
-                        display: none !important;
-                    }
-
-                    @media print {
-                        .signature-section {
-                            margin-top: 10px;
-                            font-size: 14px;
-                        }
-
-                        .signature-section table {
-                            width: 100%;
-                            border-collapse: collapse;
-                        }
-
-                        .signature-section td {
-                            padding-top: 40px;
-                        }
-                        .print-header img {
-                            height: 80px;
-                        }
-
-                        .print-header {
-                            margin-bottom: 30px;
-                        }
-                    }  
-                </style>
-            </head>
-            <body>
-                ${printContents}
-            </body>
-        </html>
-    `);
-
-
-        for (let i = 0; i < fetch_techMyJob.length; i++) {
-            const data = fetch_techMyJob[i];
-
-            // --- Fetch positions async ---
-            await new Promise((resolve) => {
-                $.ajax({
-                    url: '../php/incoming_request_php/fetch_position_myJobs.php',
-                    method: "POST",
-                    data: {
-                        user_bioID: data.requestBy.bioID,
-                        tech_bioID: data.assignToBioID ? data.assignToBioID : data.processedByID
-                    },
-                    dataType: 'json',
-                    success: function (response) {
-
-                        // Temporarily fill the hidden print area
-                        fillPrintArea(data, response);
-
-                        // Get printable HTML
-                        const htmlToPrint = document.getElementById("printable-area").innerHTML;
-
-                        // Append to print window
-                        printWin.document.write(`
-                            <div class="print-section">
-                                ${htmlToPrint}
-                            </div>
-                            <div class="page-break"></div>
-                        `);
-
-                        resolve();
-                    },
-                    error: function () {
-                        resolve();
-                    }
-                });
-            });
-        }
-
-        // Close document and print
-        printWin.document.write(`</body></html>`);
-        printWin.document.close();
-
-        // Delay to allow rendering
-        setTimeout(() => {
-            printWin.print();
-            printWin.close();
-        }, 500);
-    });
-
-
-
-
 })

@@ -43,69 +43,44 @@ try {
         $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    // else if($tech_data['role'] == 'tech') {
-    //     // select only the assignTo, and assignToBioID that matches the logged in technician
-    //     $sql = "SELECT requestNo, requestDate, requestBy, requestDescription, requestStatus, requestCategory, requestSubCategory, assignTo, assignToBioID, assignTargetStartDate, assignTargetEndDate, assignBy, assignDescription, requestEvaluationDate
-    //             FROM job_order_request 
-    //             WHERE requestStatus=? AND assignToBioID=?";
-
-    //     $stmt = $pdo->prepare($sql);
-    //     $stmt->execute([$_POST['status'],$_SESSION['user']]);
-    //     $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    // }
-
-    else if ($tech_data['role'] == 'tech') {
-        $sql = "
-            SELECT DISTINCT 
-                j.requestNo,
-                j.requestDate,
-                j.requestBy,
-                j.requestDescription,
-                j.requestStatus,
-                j.requestCategory,
-                j.requestSubCategory,
-                j.assignTo,
-                j.assignToBioID,
-                j.assignTargetStartDate,
-                j.assignTargetEndDate,
-                j.assignBy,
-                j.assignDescription,
-                j.requestEvaluationDate
-            FROM job_order_request j
-            LEFT JOIN job_order_assigned_techs t 
-                ON j.requestNo = t.requestNo
-            WHERE j.requestStatus = ?
-            AND (
-                    j.assignToBioID = ? 
-                    OR t.techBioID = ?
-                )
-        ";
+    else if($tech_data['role'] == 'tech') {
+        // select only the assignTo, and assignToBioID that matches the logged in technician
+        $sql = "SELECT requestNo, requestDate, requestBy, requestDescription, requestStatus, requestCategory, requestSubCategory, assignTo, assignToBioID, assignTargetStartDate, assignTargetEndDate, assignBy, assignDescription, requestEvaluationDate
+                FROM job_order_request 
+                WHERE requestStatus=? AND assignToBioID=?";
 
         $stmt = $pdo->prepare($sql);
-        $stmt->execute([$_POST['status'], $_SESSION['user'], $_SESSION['user']]);
+        $stmt->execute([$_POST['status'],$_SESSION['user']]);
         $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     
-
+    echo "<pre>" . print_r($data, true) . "</pre>";    
     $categoryDescriptions = [];
 
     if (count($data) > 0) {
         // Build category mapping
         $categoryCodes = array_values(array_unique(array_column($data, 'requestCategory')));
 
+            echo "<pre>" . print_r($categoryCodes, true) . "</pre>";    
+
+
         if (count($categoryCodes) > 0) {
             $placeholders = str_repeat('?,', count($categoryCodes) - 1) . '?';
+                echo "<pre>" . print_r($placeholders, true) . "</pre>";    
+            
             $sql = "SELECT category_code, category_description 
                     FROM efms_category 
                     WHERE category_code IN ($placeholders)";
             $stmt = $pdo->prepare($sql);
             $stmt->execute($categoryCodes);
 
+            echo json_encode($sql);
+
             $categoryDescriptions = $stmt->fetchAll(PDO::FETCH_KEY_PAIR); // ['code' => 'description']
         }
 
-        // Process data
+        // // Process data
         foreach ($data as &$row) {
             // Replace category code with description
             if (isset($categoryDescriptions[$row['requestCategory']])) {

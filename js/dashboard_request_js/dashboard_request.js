@@ -382,7 +382,7 @@ const topRequestsChart = new Chart(document.getElementById('topRequestsChart'), 
         scales: {
             x: { 
                 grid: { color: chartColors.neutral },
-                ticks: { color: chartColors.darkText }
+                ticks: { display: false }
             },
             y: { 
                 beginAtZero: true,
@@ -406,7 +406,7 @@ const topRequestsChart = new Chart(document.getElementById('topRequestsChart'), 
 const subCategoryChart = new Chart(document.getElementById('subCategoryChart'), {
     type: 'bar',
     data: {
-        labels: [],
+        labels: [], // labels can stay empty or be filled
         datasets: [{
             label: 'Total Requests',
             data: [],
@@ -420,7 +420,16 @@ const subCategoryChart = new Chart(document.getElementById('subCategoryChart'), 
         scales: {
             x: {
                 grid: { color: chartColors.neutral },
-                ticks: { color: chartColors.darkText, maxRotation: 45, minRotation: 45, font: { size: 12 } }
+                ticks: { 
+                    color: chartColors.darkText,
+                    maxRotation: 45,
+                    minRotation: 45,
+                    font: { 
+                        size: 6, // <-- adjust the font size here
+                        family: 'Arial', // optional: change font family
+                        weight: 'bold'   // optional: change font weight
+                    }
+                }
             },
             y: {
                 beginAtZero: true,
@@ -444,6 +453,7 @@ const subCategoryChart = new Chart(document.getElementById('subCategoryChart'), 
         }
     }
 });
+
 
 
 // Generates random pastel colors for charts
@@ -604,6 +614,7 @@ const onLoadFetch_total_request = (startDate, endDate, category, subCategory) =>
             // 🔹 Top 5 Most Common Requests
             if (Array.isArray(data.topRequests) && data.topRequests.length > 0) {
                 const colors = generateDistinctColors(data.topRequests.length);
+                console.log(data.topRequests);
                 topRequestsChart.data.labels = data.topRequests.map(t => t.requestDescription || 'Unknown');
                 topRequestsChart.data.datasets[0].data = data.topRequests.map(t => parseInt(t.total));
                 topRequestsChart.data.datasets[0].backgroundColor = colors;

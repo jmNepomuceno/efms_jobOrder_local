@@ -101,7 +101,7 @@ $(document).ready(function () {
                         columnDefs: [
                             { orderable: false, targets: 3 }
                         ],
-                        pageLength: 10,
+                        pageLength: 8,
                         lengthMenu: [5, 10, 25, 50],
                         language: {
                             emptyTable: "No concerns available"

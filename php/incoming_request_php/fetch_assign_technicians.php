@@ -10,7 +10,7 @@
         $stmt->execute([$requetNo]);
         $category = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        $sql = "SELECT techBioID, firstName, lastName, middle FROM efms_technicians WHERE techCategory = ? and role='tech'";
+        $sql = "SELECT techBioID, firstName, lastName, middle FROM efms_technicians WHERE techCategory = ? and (role='tech' OR role='unit_semi_admin') ";
         $stmt = $pdo->prepare($sql);
         $stmt->execute([$category['requestCategory']]);
         $sub_category = $stmt->fetchAll(PDO::FETCH_ASSOC);

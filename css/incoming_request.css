@@ -253,15 +253,6 @@ body .right-container .table-div .nav-request-div .my-job-order-div #your-job-su
     background: #ff3333;
 }
 
-body .right-container .table-div .nav-request-div .my-job-order-div #your-job-sub-btns #print-all-btn{
-    padding:5px 10px 5px 10px;
-    color:white;
-    font-weight: 600;
-    border:none;
-    border-radius: 5px;
-    background: #ffc108;
-}
-
 /* 
 body .right-container .table-div .sub-table-nav{
     width: 99.5%;
@@ -407,6 +398,7 @@ body .right-container .table-div .table-container #incoming-req-table tbody tr t
 
 body .right-container .table-div .table-container #incoming-req-table tbody tr td .request-by-td-div span:nth-child(5){
     font-weight: bold !important;
+    /* color:red; */
 }
 
 body .right-container .table-div .table-container #incoming-req-table tbody tr td .request-date-td-div span{

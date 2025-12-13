@@ -49,22 +49,21 @@
     // $stmt = $pdo->prepare($sql);
     // $stmt->execute();
 
-    // $sql = "UPDATE job_order_request SET requestStatus='Pending', processedBy=null, requestCorrectionDate=null, requestCorrection=null, requestJobRemarks=null, assignTo=NULL, assignBy=NULL, assignToBioID=NULL, assignTargetStartDate=NULL, assignTargetEndDate=NULL, processedByID=NULL, requestStartDate=NULL, requestPendingMaterials=NULL, requestForSched=NULL, requestPendingMaterialsDate=NULL, requestForSchedDate=NULL, requestEvaluationDate=NULL, requestCompletedDate=NULL WHERE requestID=231";
+    // $sql = "UPDATE job_order_request SET requestStatus='Pending', processedBy=null, requestCorrectionDate=null, requestCorrection=null, requestJobRemarks=null, assignTo=NULL, assignBy=NULL, assignToBioID=NULL, assignTargetStartDate=NULL, assignTargetEndDate=NULL, processedByID=NULL, requestStartDate=NULL, requestPendingMaterials=NULL, requestForSched=NULL, requestPendingMaterialsDate=NULL, requestForSchedDate=NULL, requestEvaluationDate=NULL, requestCompletedDate=NULL WHERE requestID=234";
     // $stmt = $pdo->prepare($sql);
     // $stmt->execute();
 
-    //240 // 242
-    $sql = "UPDATE job_order_request SET requestStatus='Pending', processedBy=null, requestCorrectionDate=null, requestCorrection=null, requestJobRemarks=null, assignTo=NULL, assignBy=NULL, assignToBioID=NULL, assignTargetStartDate=NULL, assignTargetEndDate=NULL, processedByID=NULL, requestStartDate=NULL, requestEvaluationDate=NULL, requestCompletedDate=NULL WHERE requestID=240";
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute();
+    // $sql = "DELETE FROM job_order_assigned_techs WHERE requestNo='IU-2025-12-001'";
+    // $stmt = $pdo->prepare($sql);
+    // $stmt->execute();
 
-    $sql = "UPDATE job_order_request SET requestStatus='Pending', processedBy=null, requestCorrectionDate=null, requestCorrection=null, requestJobRemarks=null, assignTo=NULL, assignBy=NULL, assignToBioID=NULL, assignTargetStartDate=NULL, assignTargetEndDate=NULL, processedByID=NULL, requestStartDate=NULL, requestEvaluationDate=NULL, requestCompletedDate=NULL WHERE requestID=242";
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute();
+    //     $sql = "UPDATE job_order_request SET requestStatus='Pending', processedBy=null, requestCorrectionDate=null, requestCorrection=null, requestJobRemarks=null, assignTo=NULL, assignBy=NULL, assignToBioID=NULL, assignTargetStartDate=NULL, assignTargetEndDate=NULL, processedByID=NULL, requestStartDate=NULL, requestEvaluationDate=NULL, requestCompletedDate=NULL WHERE requestID=227";
+    // $stmt = $pdo->prepare($sql);
+    // $stmt->execute();
 
-    $sql = "DELETE FROM job_order_assigned_techs WHERE requestNo='IU-2025-12-007'";
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute();
+    //     $sql = "UPDATE job_order_request SET requestStatus='Pending', processedBy=null, requestCorrectionDate=null, requestCorrection=null, requestJobRemarks=null, assignTo=NULL, assignBy=NULL, assignToBioID=NULL, assignTargetStartDate=NULL, assignTargetEndDate=NULL, processedByID=NULL, requestStartDate=NULL, requestEvaluationDate=NULL, requestCompletedDate=NULL WHERE requestID=226";
+    // $stmt = $pdo->prepare($sql);
+    // $stmt->execute();
 
     // echo "<pre>"; print_r($_SESSION); echo "</pre>";
 
@@ -191,7 +190,6 @@
                             <span id="completed-notif-span">0</span>
                         </button>
                         <button id="your-job-close-btn">Close</button>
-                        <button id="print-all-btn">Print All Form</button>
                     </div>
                 </div>
             </div>
@@ -381,8 +379,6 @@
                             <?php endif; ?>
                         </div>
 
-                        
-                                
                         <!-- Signature Section -->
                         <div class="signature-section" style="margin-top: 10px; text-align: center;">
                             <table style="width: 100%; border: none;">
@@ -441,7 +437,6 @@
         </div>
     </div>
 
-    <div id="print-all-container" style="display:none;"></div>
 
     <?php require "../links/script_links.php" ?>
 

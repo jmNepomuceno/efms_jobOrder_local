@@ -1,6 +1,7 @@
 let requestsPerHourChartInstance; // Declare globally
 let category_clicked = "ALL", sub_category_clicked = null, techBioID_clicked = null;
 let fetch_viewRequestData;
+let fetch_satisfactionData;
 let techEvalTable;
 
 let modal_view_form = new bootstrap.Modal(document.getElementById('modal-view-form'));
@@ -313,25 +314,64 @@ const fetchTechEval = (startDate, endDate, category, subCategory, techBioID) => 
         dataType: "json",
         success: function (response) {
             console.log(response);
-
+            fetch_satisfactionData = response;
             let dataSet = [];
+
             for (let i = 0; i < response.length; i++) {
                 let evalData = response[i].requestEvaluation;
+
+                // --- Technician handling ---
+                let assignedTechs = response[i].assignedTechs || [];
+
+                // Fallback (old structure)
+                if (assignedTechs.length === 0 && response[i].assignTo) {
+                    assignedTechs = [{
+                        name: response[i].assignTo,
+                        bioID: response[i].assignToBioID
+                    }];
+                }
+
+                let mainTech = assignedTechs.length ? assignedTechs[0].name : '';
+                let extraTechs = assignedTechs.slice(1);
+
+                let techDropdownHTML = '';
+                if (extraTechs.length > 0) {
+
+                    let extraList = extraTechs
+                        .map(t => `<li>${t.name} (Bio ID: ${t.bioID})</li>`)
+                        .join('');
+
+                    techDropdownHTML = `
+                        <div class="assigned-tech-dropdown"
+                            style="display:inline-block; margin-left:6px;">
+                            <span class="toggle-techs"
+                                style="cursor:pointer; color:#0d6efd; text-decoration:underline;">
+                                (+${extraTechs.length} more)
+                            </span>
+                            <ul class="tech-list"
+                                style="display:none; list-style:none; margin:5px 0 0 0; padding-left:12px; border-left:2px solid #0d6efd; font-size:0.8rem; ">
+                                ${extraList}
+                            </ul>
+                        </div>
+                    `;
+                }
+
 
                 dataSet.push([
                     `<span class="requestNo-span">${response[i].requestNo}</span>`,
                     `<span>${response[i].requestDate}</span>`,
                     `<span>${response[i].requestCategory}</span>`,
                     `<span>${response[i].requestSubCategory}</span>`,
-                    `<span>${(response[i].assignTo ? response[i].assignTo : response[i].processedBy)}</span>`,
+                    `<span>${mainTech}</span> ${techDropdownHTML}`,
                     `<span>${evalData.q1}</span>`,
                     `<span>${evalData.q2}</span>`,
                     `<span>${evalData.q3}</span>`,
                     `<span>${evalData.q4}</span>`,
                     `<span>${evalData.q5}</span>`,
-                    `<button type="button" class="btn btn-primary view-request-btn">View</button>`
+                    `<button type="button" class="btn btn-primary view-request-satisfaction-btn">View</button>`
                 ]);
             }
+
 
             if ($.fn.DataTable.isDataTable('#tech-eval-table')) {
                 $('#tech-eval-table').DataTable().destroy();
@@ -1165,6 +1205,30 @@ $(document).ready(function () {
         modal_view_form.show()
     })
 
+    $(document).off('click', '.view-request-satisfaction-btn').on('click', '.view-request-satisfaction-btn', function() {
+        const index = $('.view-request-satisfaction-btn').index(this);
+        const data = fetch_satisfactionData[index]
+        console.log(data)
+        
+        $('#user-name').text(data.requestBy.name);
+        $('#user-bioid').text(data.requestBy.bioID);
+        $('#user-division').text(data.requestBy.division);
+        $('#user-section').text(data.requestBy.section);
+    
+        $('#job-order-id').text(`${data.requestNo}`);
+        $('#date-requested').text(data.requestDate);
+        $('#request-type').text(data.requestCategory);
+    
+        $('#request-description').text(data.requestDescription);
+
+        // $('#tech-name-i').text(data.processedBy ? data.processedBy : "No data yet.")
+        $('#tech-name-i').text((data.assignTo ? data.assignTo : data.processedBy))
+        $('#reception-date-i').text(data.requestStartDate ? data.requestStartDate : data.requestCorrectionDate )
+        $('.tech-remarks-textarea').attr('placeholder', (data.requestJobRemarks) ? data.requestJobRemarks : data.requestCorrection);
+        $('#modal-status-incoming').text(data.requestStatus);
+        modal_view_form.show()
+    })
+
     document.querySelectorAll('.dashboard-nav span').forEach(tab => {
         tab.addEventListener('click', () => {
             // Highlight active
@@ -1205,5 +1269,20 @@ $(document).ready(function () {
             tooltip.style.display = 'none';
         });
     });
+
+    $(document).on('click', '.toggle-techs', function () {
+        const list = $(this).siblings('.tech-list');
+
+        list.slideToggle(120);
+
+        // Optional: toggle text
+        if ($(this).text().includes('+')) {
+            $(this).text('Hide');
+        } else {
+            const count = list.children('li').length;
+            $(this).text(`(+${count} more)`);
+        }
+    });
+
 
 });

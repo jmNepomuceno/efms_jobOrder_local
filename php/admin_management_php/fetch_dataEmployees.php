@@ -1,7 +1,7 @@
 <?php
 include ('../../session.php');
 include('../../assets/connection.php');
-// include('../../assets/mssql_connection.php');
+include('../../assets/mssql_connection.php');
 
 $current_date = date('m/d/Y - h:i:s A');
 
@@ -12,32 +12,32 @@ try {
     $stmt->execute();
     $existingEmployees = $stmt->fetchAll(PDO::FETCH_COLUMN); // Fetch only techBioID
 
-    // // Fetch HRIS data
-    // $sql = "SELECT bioID, LastName, FirstName, Middle, employmentStatus FROM dbo.tblEmployee WHERE sectionID = 23";
-    // $stmt = $pdo2->prepare($sql);
-    // $stmt->execute();
-    // $data_hris = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    // Fetch HRIS data
+    $sql = "SELECT bioID, LastName, FirstName, Middle, employmentStatus FROM dbo.tblEmployee WHERE sectionID = 23";
+    $stmt = $pdo2->prepare($sql);
+    $stmt->execute();
+    $data_hris = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    // $newEntries = [];
-    // $insert_sql = "INSERT INTO efms_technicians (techBioID, firstName, lastName, middle, employmentStatus, role) 
-    //                VALUES (?, ?, ?, ?, ?, ?)";
-    // $insert_stmt = $pdo->prepare($insert_sql);
+    $newEntries = [];
+    $insert_sql = "INSERT INTO efms_technicians (techBioID, firstName, lastName, middle, employmentStatus, role) 
+                   VALUES (?, ?, ?, ?, ?, ?)";
+    $insert_stmt = $pdo->prepare($insert_sql);
 
-    // foreach ($data_hris as $row) {
-    //     // Check if this bioID exists in efms_technicians
-    //     if (!in_array($row['bioID'], $existingEmployees)) {
-    //         // Insert new record
-    //         $insert_stmt->execute([
-    //             $row['bioID'],
-    //             $row['FirstName'],
-    //             $row['LastName'],
-    //             $row['Middle'],
-    //             $row['employmentStatus'],
-    //             "tech"
-    //         ]);
-    //         $newEntries[] = $row['bioID']; // Store new IDs
-    //     }
-    // }
+    foreach ($data_hris as $row) {
+        // Check if this bioID exists in efms_technicians
+        if (!in_array($row['bioID'], $existingEmployees)) {
+            // Insert new record
+            $insert_stmt->execute([
+                $row['bioID'],
+                $row['FirstName'],
+                $row['LastName'],
+                $row['Middle'],
+                $row['employmentStatus'],
+                "tech"
+            ]);
+            $newEntries[] = $row['bioID']; // Store new IDs
+        }
+    }
 
     $output = "";
 

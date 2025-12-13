@@ -41,6 +41,7 @@ body {
     border-radius: 12px;
     padding: 30px 35px;
     box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+
 }
 
 /* Page Header */
@@ -66,6 +67,7 @@ body {
     border: 1px solid #e2e2e2;
     box-shadow: 0 2px 6px rgba(0,0,0,0.05);
 }
+
 
 .section-title {
     margin: 0 0 15px 0;
@@ -191,17 +193,20 @@ body {
     font-weight: 600;
 }
 
+.update-instruction {
+    font-size: 1.1rem;
+    color: red;
+    margin-bottom: 10px;
+    text-decoration: underline;
+}
+
+
+
 .status-ongoing { background: #f0ad4e; }       /* yellow */
 .status-major { background: #b30000; }         /* red */
 .status-minor { background: #005fb3; }         /* blue */
 .status-completed { background: #28a745; }     /* green */
 
-.update-instruction {
-    font-size: 0.9rem;
-    color: #555;
-    margin-bottom: 10px;
-    text-decoration: underline;
-}
 
 @media (max-width: 900px) {
     .right-container { width: 100%; }

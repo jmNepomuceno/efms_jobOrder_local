@@ -7,12 +7,28 @@ $endDate = !empty($_POST['endDate']) ? $_POST['endDate'] : date('Y-m-d');
 $divisionID = $_POST['division'] ?? null;
 $sectionID = $_POST['section'] ?? null;
 
+$startDateFormatted = date('m/d/Y', strtotime($startDate));
+$endDateFormatted = date('m/d/Y', strtotime($endDate));
+
+$whereFilters = "";
+$params = [
+    ':startDate' => $startDateFormatted,
+    ':endDate' => $endDateFormatted,
+];
+
+if (!empty($divisionID)) {
+    $whereFilters .= " AND JSON_UNQUOTE(JSON_EXTRACT(requestBy, '$.divisionID')) = :divisionID ";
+    $params[':divisionID'] = $divisionID;
+}
+
+if (!empty($sectionID)) {
+    $whereFilters .= " AND JSON_UNQUOTE(JSON_EXTRACT(requestBy, '$.sectionID')) = :sectionID ";
+    $params[':sectionID'] = $sectionID;
+}
+
 // TEMP (for testing)
 // $startDate = '2025-05-21';
 // $endDate = '2025-10-27';
-
-$startDateFormatted = date('m/d/Y', strtotime($startDate));
-$endDateFormatted = date('m/d/Y', strtotime($endDate));
 
 try {
     // 🧩 Step 1: Fetch Top Requesting Divisions/Sections
@@ -25,13 +41,11 @@ try {
         WHERE STR_TO_DATE(requestDate, '%m/%d/%Y - %r') 
               BETWEEN STR_TO_DATE(:startDate, '%m/%d/%Y') 
               AND STR_TO_DATE(CONCAT(:endDate, ' 11:59:59 PM'), '%m/%d/%Y %r')
+              $whereFilters
         GROUP BY division, section
         ORDER BY total_requests DESC
     ");
-    $stmt->execute([
-        ':startDate' => $startDateFormatted,
-        ':endDate' => $endDateFormatted
-    ]);
+    $stmt->execute($params);
     $topDivisionsSections = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     // 🧩 Step 2: Fetch Total Requests
@@ -40,11 +54,9 @@ try {
         WHERE STR_TO_DATE(requestDate, '%m/%d/%Y - %r') 
               BETWEEN STR_TO_DATE(:startDate, '%m/%d/%Y') 
               AND STR_TO_DATE(CONCAT(:endDate, ' 11:59:59 PM'), '%m/%d/%Y %r')
+              $whereFilters
     ");
-    $stmtTotal->execute([
-        ':startDate' => $startDateFormatted,
-        ':endDate' => $endDateFormatted
-    ]);
+    $stmtTotal->execute($params);
     $totalRequests = (int) $stmtTotal->fetchColumn();
 
     // 🧩 Step 3: Determine Top Division and Top Section
@@ -64,13 +76,11 @@ try {
         WHERE STR_TO_DATE(requestDate, '%m/%d/%Y - %r') 
               BETWEEN STR_TO_DATE(:startDate, '%m/%d/%Y') 
               AND STR_TO_DATE(CONCAT(:endDate, ' 11:59:59 PM'), '%m/%d/%Y %r')
+              $whereFilters
         GROUP BY request_day
         ORDER BY request_day ASC
     ");
-    $stmtTrend->execute([
-        ':startDate' => $startDateFormatted,
-        ':endDate' => $endDateFormatted
-    ]);
+    $stmtTrend->execute($params);
     $requestVolumeTrend = $stmtTrend->fetchAll(PDO::FETCH_ASSOC);
 
     // 🧩 Step 5: Average Evaluation Rating per Division
@@ -92,11 +102,9 @@ try {
         AND STR_TO_DATE(requestDate, '%m/%d/%Y - %r') 
             BETWEEN STR_TO_DATE(:startDate, '%m/%d/%Y') 
             AND STR_TO_DATE(CONCAT(:endDate, ' 11:59:59 PM'), '%m/%d/%Y %r')
+            $whereFilters
     ");
-    $stmtRating->execute([
-        ':startDate' => $startDateFormatted,
-        ':endDate' => $endDateFormatted
-    ]);
+    $stmtRating->execute($params);
 
     $divisionRatings = [];
 
@@ -167,12 +175,10 @@ try {
         AND STR_TO_DATE(requestDate, '%m/%d/%Y - %r') 
             BETWEEN STR_TO_DATE(:startDate, '%m/%d/%Y') 
             AND STR_TO_DATE(CONCAT(:endDate, ' 11:59:59 PM'), '%m/%d/%Y %r')
+            $whereFilters
     ");
 
-    $stmtCompletion->execute([
-        ':startDate' => $startDateFormatted,
-        ':endDate' => $endDateFormatted
-    ]);
+    $stmtCompletion->execute($params);
 
     $completionTimes = [];
     while ($row = $stmtCompletion->fetch(PDO::FETCH_ASSOC)) {
@@ -208,14 +214,12 @@ try {
         WHERE STR_TO_DATE(requestDate, '%m/%d/%Y - %r') 
             BETWEEN STR_TO_DATE(:startDate, '%m/%d/%Y') 
             AND STR_TO_DATE(CONCAT(:endDate, ' 11:59:59 PM'), '%m/%d/%Y %r')
+            $whereFilters
         GROUP BY requestor_name
         ORDER BY total_requests DESC
         LIMIT 5
     ");
-    $stmtTopRequestors->execute([
-        ':startDate' => $startDateFormatted,
-        ':endDate' => $endDateFormatted
-    ]);
+    $stmtTopRequestors->execute($params);
     $topRequestors = $stmtTopRequestors->fetchAll(PDO::FETCH_ASSOC);
 
     $response['topRequestors'] = $topRequestors;
@@ -233,14 +237,12 @@ try {
         AND STR_TO_DATE(requestDate, '%m/%d/%Y - %r') 
             BETWEEN STR_TO_DATE(:startDate, '%m/%d/%Y') 
             AND STR_TO_DATE(CONCAT(:endDate, ' 11:59:59 PM'), '%m/%d/%Y %r')
+            $whereFilters
         GROUP BY request_day
         ORDER BY request_day ASC
     ");
 
-    $stmtCancelledRejected->execute([
-        ':startDate' => $startDateFormatted,
-        ':endDate' => $endDateFormatted
-    ]);
+    $stmtCancelledRejected->execute($params);
 
     $cancelledRejectedTrend = $stmtCancelledRejected->fetchAll(PDO::FETCH_ASSOC);
     $response['cancelledRejectedTrend'] = $cancelledRejectedTrend;

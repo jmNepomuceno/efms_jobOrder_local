@@ -1,7 +1,7 @@
 <?php
 include ('../../session.php');
 include('../../assets/connection.php');
-// include('../../assets/mssql_connection.php');
+include('../../assets/mssql_connection.php');
 
 $current_date = date('m/d/Y - h:i:s A');
 

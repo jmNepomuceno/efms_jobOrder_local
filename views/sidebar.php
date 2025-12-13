@@ -151,21 +151,24 @@
             <?php }; ?>
 
             <hr id="sub-routes-hr">
-            <?php if ($_SESSION['role'] == 'super_admin' || $_SESSION['role'] == 'unit_admin' || $_SESSION['role'] == 'unit_semi_admin') { ?>
+            <?php if ($_SESSION['role'] == 'super_admin' || $_SESSION['role'] == 'unit_admin' || $_SESSION['role'] == 'unit_semi_admin' || $_SESSION['role'] == 'tech') { ?>
                 <div class="side-bar-routes" id="update-sub-div">
                     <i class="fa-solid fa-box"></i>
                     <span>Updates</span>
                     <span id="notif-value-updates">0</span>
+                    <!-- <i id="adminmanage-arrow" class="fa-solid fa-caret-down"></i> -->
                 </div>
             <?php }; ?>
 
-            <?php if ($_SESSION['role'] == 'super_admin' || $_SESSION['role'] == 'unit_admin' || $_SESSION['role'] == 'unit_semi_admin') { ?>
+            <?php if ($_SESSION['role'] == 'super_admin' || $_SESSION['role'] == 'unit_admin' || $_SESSION['role'] == 'unit_semi_admin' || $_SESSION['role'] == 'tech') { ?>
                 <div class="side-bar-routes" id="concerns-sub-div">
                     <i class="fa-solid fa-box"></i>
                     <span>Concerns / Issues / Bugs</span>
                     <!-- <i id="adminmanage-arrow" class="fa-solid fa-caret-down"></i> -->
                 </div>
             <?php }; ?>
+
+            
         </div>
 
         <div class="user-acc-div">

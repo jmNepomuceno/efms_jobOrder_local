@@ -144,7 +144,7 @@
                         </p>
                     </div>
 
-                    <div class="tech-assessment-section">
+                     <div class="tech-assessment-section">
                         <h5 class="info-heading">Technician Remarks Details</h5>
                         <div class="tech-info-assessment">
                             <span><b>Technician Name:</b> <i id="tech-name-i"></i></span>
@@ -158,8 +158,6 @@
                         <button id="finish-assess-btn" class="btn btn-success">Finish Job</button>
                     </div>
                 </div>
-
-               
 
                 <!-- Modal Footer -->
                 <div class="modal-footer">

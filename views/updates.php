@@ -42,10 +42,18 @@
                 <h2 class="page-title">System Development Updates</h2>
                 <p class="page-subtitle">Overview of ongoing, major, minor, and completed updates</p>
 
+                <div class="update-section" id="important-notice"> 
+                    <i class="fa-solid fa-circle-exclamation"></i> 
+                    <p class="important-notice-text"> 
+                        All EFMS personnel are encouraged to create an account in our Employees Portal in order to access and use the new EFMS Job Order Request System. The Employees Portal can be accessed at: http://192.168.42.245:8085/
+                        Personnel without a portal account will not be able to assign job requests or finish/complete job requests.
+                    </p>
+                </div>
+
                 <!-- Completed Updates -->
                 <div class="update-section">
                     <h3 class="section-title completed">Completed & Functional Updates</h3>
-                    <p class="update-instruction">
+                    <p class="update-instruction" >
                         Kindly refresh the webpage to take effect the updates.
                     </p>
                     <table class="updates-table">
@@ -108,6 +116,8 @@
                         <tbody id="minor-concerns-body"></tbody>
                     </table>
                 </div>
+
+              
 
                 <!-- Admin Review Panel (DataTable for incoming suggestions) -->
                 <div class="update-section">

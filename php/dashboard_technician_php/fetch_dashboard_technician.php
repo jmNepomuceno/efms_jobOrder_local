@@ -50,9 +50,9 @@ try {
     // 🧩 2️⃣ TECHNICIAN PERFORMANCE + EVALUATION SUMMARY
     $techQuery = "
         SELECT 
-            ANY_VALUE(j.processedBy) AS tech_name,
-            j.processedByID AS tech_bio_id,
-            COUNT(*) AS total_jobs,
+            ANY_VALUE(a.techName) AS tech_name,
+            a.techBioID AS tech_bio_id,
+            COUNT(DISTINCT j.requestNo) AS total_jobs,
             SUM(CASE WHEN j.requestStatus IN ('Completed', 'Evaluation') THEN 1 ELSE 0 END) AS completed_jobs,
             SUM(CASE 
                 WHEN TIMESTAMPDIFF(MINUTE,
@@ -107,6 +107,8 @@ try {
             ) / 5), 2) AS avg_rating
 
         FROM job_order_request j
+        INNER JOIN job_order_assigned_techs a
+            ON j.requestNo = a.requestNo
         WHERE j.requestStatus IN ('Completed', 'Evaluation')
         AND STR_TO_DATE(j.requestDate, '%m/%d/%Y - %r') 
             BETWEEN STR_TO_DATE(:startDate, '%m/%d/%Y')
@@ -120,13 +122,12 @@ try {
         }
     }
 
-    $techQuery .= " GROUP BY j.processedByID ORDER BY completed_jobs DESC";
-
-
+    $techQuery .= " GROUP BY a.techBioID ORDER BY completed_jobs DESC";
 
     $stmt2 = $pdo->prepare($techQuery);
     $stmt2->execute($params);
     $techSummary = $stmt2->fetchAll(PDO::FETCH_ASSOC);
+
 
     // 🧭 3️⃣ ASSIGNMENT FLOW NETWORK DATA
     $assignFlowQuery = "

@@ -39,6 +39,8 @@ body .right-container{
     align-items: center;
 
     position:relative;
+
+    overflow: hidden;
 }
 
 body .right-container .concern-container {
