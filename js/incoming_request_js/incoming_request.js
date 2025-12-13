@@ -1049,7 +1049,10 @@ $(document).ready(function(){
     // }, 10000); // 10 seconds (10000ms)
 
 
-    $(document).off('click', '.request-action-button').on('click', '.request-action-button', function() {        
+    $(document).off('click', '.request-action-button').on('click', '.request-action-button', function() {     
+        $('.tech-btns button').css('opacity', '0.5');  
+        $('#diagnosis-btn').css('opacity', '1');
+
         // fetch data-photo
         console.log(491)
         const index = $('.request-action-button').index(this);
@@ -1412,6 +1415,9 @@ $(document).ready(function(){
     });
 
     $(document).on("click", ".request-edit-action-button-myJob", function () {
+        $('.tech-btns button').css('opacity', '0.5');  
+        $('#diagnosis-btn').css('opacity', '1');
+
         const index = $('.request-edit-action-button-myJob').index(this);
         const data = fetch_techMyJob[index];
         clicked_requestNo = data.requestNo;

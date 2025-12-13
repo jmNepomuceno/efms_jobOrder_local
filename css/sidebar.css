@@ -216,6 +216,7 @@ body .left-container .side-bar-route .side-bar-routes #dashboard-arrow{
     
 }
 
+
 @media only screen and (max-height: 800px){
     body .left-container .home-name-div h1{
         font-size: 0.8rem;

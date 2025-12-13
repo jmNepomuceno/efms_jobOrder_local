@@ -166,8 +166,6 @@
                     <!-- <i id="adminmanage-arrow" class="fa-solid fa-caret-down"></i> -->
                 </div>
             <?php }; ?>
-
-            
         </div>
 
         <div class="user-acc-div">
