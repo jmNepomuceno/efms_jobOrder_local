@@ -1052,6 +1052,8 @@ $(document).ready(function(){
         const data = fetch_requestData[index];
         clicked_requestNo = data.requestNo
         console.log(data)
+
+        $('#assign-assess-btn').css('display', 'flex');
         
         $('#user-name').text(data.requestBy.name);
         $('#user-bioid').text(data.requestBy.bioID);

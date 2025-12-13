@@ -937,7 +937,6 @@ const evaluationTotalsChart = (response) => {
 
 
 
-
 const fetchNotifValue = () =>{
     $.ajax({
         url: '../php/incoming_request_php/fetch_notifValue.php',
@@ -1014,7 +1013,6 @@ socket.onmessage = function(event) {
             console.log("Unknown action:", data.action);
     }
 };
-
 
 
 // Initial move to the first active tab on load

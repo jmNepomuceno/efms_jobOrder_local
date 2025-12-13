@@ -144,6 +144,10 @@ $(document).ready(function(){
         window.location.href = "../views/updates.php";
     });
 
+    $('#report-sub-div').click(function(){
+        window.location.href = "../views/report.php";
+    });
+
 
     $('#logout-btn').click(function(){
         modal_logout.show()

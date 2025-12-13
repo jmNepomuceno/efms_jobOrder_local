@@ -150,6 +150,13 @@
             </div>            
             <?php }; ?>
 
+            <?php if ($_SESSION['role'] == 'super_admin' || $_SESSION['role'] == 'unit_admin' || $_SESSION['role'] == 'unit_semi_admin' || $_SESSION['role'] == 'tech') { ?>
+                <div class="side-bar-routes" id="report-sub-div">
+                    <i class="fa-solid fa-box"></i>
+                    <span>Reports</span>
+                </div>
+            <?php }; ?>
+
             <hr id="sub-routes-hr">
             <?php if ($_SESSION['role'] == 'super_admin' || $_SESSION['role'] == 'unit_admin' || $_SESSION['role'] == 'unit_semi_admin' || $_SESSION['role'] == 'tech') { ?>
                 <div class="side-bar-routes" id="update-sub-div">
